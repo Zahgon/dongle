@@ -2,7 +2,6 @@ package sm4
 
 import (
 	"crypto/cipher"
-	"encoding/binary"
 )
 
 const (
@@ -51,158 +50,68 @@ type sm4Cipher struct {
 
 // NewCipher creates a new SM4 cipher with the given key.
 // The key must be exactly 16 bytes (128 bits).
-func NewCipher(key []byte) cipher.Block {
-	if len(key) != KeySize {
-		panic("crypto/sm4: invalid key size")
-	}
-
-	c := &sm4Cipher{}
-	copy(c.key[:], key)
-	return c
-}
+func NewCipher(key []byte) cipher.Block { _ = "STUB: not implemented"; return *new(cipher.Block) }
 
 // BlockSize returns the SM4 block size.
 func (c *sm4Cipher) BlockSize() int {
-	return BlockSize
+	_ = "STUB: not implemented"
+
+	// Encrypt encrypts the first block in src into dst.
+	// Dst and src must overlap entirely or not at all.
+	return 0
 }
 
-// Encrypt encrypts the first block in src into dst.
-// Dst and src must overlap entirely or not at all.
-func (c *sm4Cipher) Encrypt(dst, src []byte) {
-	if len(src) < BlockSize {
-		panic("crypto/sm4: input not full block")
-	}
-	if len(dst) < BlockSize {
-		panic("crypto/sm4: output not full block")
-	}
+func (c *sm4Cipher) Encrypt(dst, src []byte) { _ = "STUB: not implemented"; return }
 
-	// Convert input to 4 32-bit words
-	var x [4]uint32
-	x[0] = binary.BigEndian.Uint32(src[0:4])
-	x[1] = binary.BigEndian.Uint32(src[4:8])
-	x[2] = binary.BigEndian.Uint32(src[8:12])
-	x[3] = binary.BigEndian.Uint32(src[12:16])
+// Convert input to 4 32-bit words
 
-	encryptRounds(&x, &c.key)
-
-	// Convert output back to bytes
-	binary.BigEndian.PutUint32(dst[0:4], x[0])
-	binary.BigEndian.PutUint32(dst[4:8], x[1])
-	binary.BigEndian.PutUint32(dst[8:12], x[2])
-	binary.BigEndian.PutUint32(dst[12:16], x[3])
-}
+// Convert output back to bytes
 
 // Decrypt decrypts the first block in src into dst.
 // Dst and src must overlap entirely or not at all.
-func (c *sm4Cipher) Decrypt(dst, src []byte) {
-	if len(src) < BlockSize {
-		panic("crypto/sm4: input not full block")
-	}
-	if len(dst) < BlockSize {
-		panic("crypto/sm4: output not full block")
-	}
+func (c *sm4Cipher) Decrypt(dst, src []byte) { _ = "STUB: not implemented"; return }
 
-	// Convert input to 4 32-bit words
-	var x [4]uint32
-	x[0] = binary.BigEndian.Uint32(src[0:4])
-	x[1] = binary.BigEndian.Uint32(src[4:8])
-	x[2] = binary.BigEndian.Uint32(src[8:12])
-	x[3] = binary.BigEndian.Uint32(src[12:16])
+// Convert input to 4 32-bit words
 
-	decryptRounds(&x, &c.key)
-
-	// Convert output back to bytes
-	binary.BigEndian.PutUint32(dst[0:4], x[0])
-	binary.BigEndian.PutUint32(dst[4:8], x[1])
-	binary.BigEndian.PutUint32(dst[8:12], x[2])
-	binary.BigEndian.PutUint32(dst[12:16], x[3])
-}
+// Convert output back to bytes
 
 // sBoxTransform performs the s-box substitution (a.k.a. tau transformation)
-func sBoxTransform(a uint32) uint32 {
-	return uint32(sBox[a>>24&0xff])<<24 |
-		uint32(sBox[a>>16&0xff])<<16 |
-		uint32(sBox[a>>8&0xff])<<8 |
-		uint32(sBox[a&0xff])
-}
+func sBoxTransform(a uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // lTransform performs the L transformation
-func lTransform(b uint32) uint32 {
-	return b ^ rotateLeft(b, 2) ^ rotateLeft(b, 10) ^ rotateLeft(b, 18) ^ rotateLeft(b, 24)
-}
+func lTransform(b uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // lPrimeTransform performs the L' transformation
-func lPrimeTransform(b uint32) uint32 {
-	return b ^ rotateLeft(b, 13) ^ rotateLeft(b, 23)
-}
+func lPrimeTransform(b uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // rotateLeft performs a 32-bit left rotation
-func rotateLeft(x uint32, n uint) uint32 {
-	return (x << n) | (x >> (32 - n))
-}
+func rotateLeft(x uint32, n uint) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // expandKey expands the SM4 key into round keys
-func expandKey(key *[KeySize]byte) [32]uint32 {
-	var mk [4]uint32
-	var rk [32]uint32
+func expandKey(key *[KeySize]byte) [32]uint32 { _ = "STUB: not implemented"; return nil }
 
-	// Convert key to 4 32-bit words
-	mk[0] = binary.BigEndian.Uint32(key[0:4])
-	mk[1] = binary.BigEndian.Uint32(key[4:8])
-	mk[2] = binary.BigEndian.Uint32(key[8:12])
-	mk[3] = binary.BigEndian.Uint32(key[12:16])
+// Convert key to 4 32-bit words
 
-	// Initial transformation (FK)
-	mk[0] ^= 0xa3b1bac6
-	mk[1] ^= 0x56aa3350
-	mk[2] ^= 0x677d9197
-	mk[3] ^= 0xb27022dc
+// Initial transformation (FK)
 
-	// Generate round keys
-	for i := range 32 {
-		temp := mk[1] ^ mk[2] ^ mk[3] ^ ck[i]
-		temp = sBoxTransform(temp)
-		mk[0] ^= lPrimeTransform(temp)
-		rk[i] = mk[0]
-		// Rotate the registers
-		mk[0], mk[1], mk[2], mk[3] = mk[1], mk[2], mk[3], mk[0]
-	}
+// Generate round keys
 
-	return rk
-}
+// Rotate the registers
 
 // encryptRounds performs 32 rounds of SM4 encryption on a single block
-func encryptRounds(x *[4]uint32, key *[KeySize]byte) {
-	rk := expandKey(key)
+func encryptRounds(x *[4]uint32, key *[KeySize]byte) { _ = "STUB: not implemented"; return }
 
-	// 32 rounds of encryption
-	for i := range 32 {
-		t := x[1] ^ x[2] ^ x[3] ^ rk[i]
-		t = lTransform(sBoxTransform(t))
-		newVal := x[0] ^ t
-		// Shift window and append new value
-		x[0], x[1], x[2], x[3] = x[1], x[2], x[3], newVal
-	}
+// 32 rounds of encryption
 
-	// Final swap
-	x[0], x[3] = x[3], x[0]
-	x[1], x[2] = x[2], x[1]
-}
+// Shift window and append new value
+
+// Final swap
 
 // decryptRounds performs 32 rounds of SM4 decryption on a single block
-func decryptRounds(x *[4]uint32, key *[KeySize]byte) {
-	rk := expandKey(key)
+func decryptRounds(x *[4]uint32, key *[KeySize]byte) { _ = "STUB: not implemented"; return }
 
-	// 32 rounds of decryption (using round keys in reverse order)
-	for i := 31; i >= 0; i-- {
-		t := x[1] ^ x[2] ^ x[3] ^ rk[i]
-		t = lTransform(sBoxTransform(t))
-		newVal := x[0] ^ t
-		// Shift window and append new value
-		x[0], x[1], x[2], x[3] = x[1], x[2], x[3], newVal
-	}
+// 32 rounds of decryption (using round keys in reverse order)
 
-	// Final swap
-	x[0], x[3] = x[3], x[0]
-	x[1], x[2] = x[2], x[1]
-}
+// Shift window and append new value
+
+// Final swap

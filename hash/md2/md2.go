@@ -72,83 +72,58 @@ type digest struct {
 
 // Reset resets the hash to its initial state.
 func (d *digest) Reset() {
+	_ = "STUB: not implemented"
 	// Use clear for better performance on modern Go versions
-	clear(d.digest[:])
-	clear(d.state[:])
-	clear(d.x[:])
-	d.nx = 0
+	return
 }
 
 // New returns a new hash.Hash computing the MD2 checksum.
-func New() hash.Hash {
-	d := new(digest)
-	d.Reset()
-	return d
-}
+func New() hash.Hash { _ = "STUB: not implemented"; return *new(hash.Hash) }
 
 // Size returns the size of the hash in bytes.
-func (d *digest) Size() int { return HashSize }
+func (d *digest) Size() int {
+	_ = "STUB: not implemented"
 
-// BlockSize returns the block size of the hash in bytes.
-func (d *digest) BlockSize() int { return BlockSize }
+	// BlockSize returns the block size of the hash in bytes.
+	return 0
+}
 
-// Write adds the contents of p to the running hash.
-// It never returns an error.
+func (d *digest) BlockSize() int {
+	_ = "STUB: not implemented"
+
+	// Write adds the contents of p to the running hash.
+	// It never returns an error.
+	return 0
+}
+
 func (d *digest) Write(p []byte) (n int, err error) {
-	n = len(p)
+	_ = "STUB: not implemented"
 
 	// If we have something left in the buffer
-	if d.nx > 0 {
-		nu := uint8(n)
-
-		// try to copy the rest n bytes free of the buffer into the buffer than hash the buffer
-		if (nu + d.nx) > BlockSize {
-			nu = BlockSize - d.nx
-		}
-
-		// Use copy for better performance
-		copy(d.x[d.nx:], p[:nu])
-		d.nx += nu
-
-		// if we have exactly 1 block in the buffer than hash that block
-		if d.nx == BlockSize {
-			d.block(d.x[:])
-			d.nx = 0
-		}
-
-		p = p[nu:]
-	}
-
-	m := len(p) / BlockSize
-	// For the rest, try hashing by the block size
-	for range m {
-		d.block(p[:BlockSize])
-		p = p[BlockSize:]
-	}
-
-	// Then stuff the rest that doesn't add up to a block to the buffer
-	if len(p) > 0 {
-		d.nx = uint8(copy(d.x[:], p))
-	}
-
-	return
+	return 0, nil
 }
+
+// try to copy the rest n bytes free of the buffer into the buffer than hash the buffer
+
+// Use copy for better performance
+
+// if we have exactly 1 block in the buffer than hash that block
+
+// For the rest, try hashing by the block size
+
+// Then stuff the rest that doesn't add up to a block to the buffer
 
 // Sum appends the current hash to in and returns the resulting slice.
 // It does not change the underlying hash state.
 func (d *digest) Sum(in []byte) []byte {
+	_ = "STUB: not implemented"
 	// Make a copy of d0 so that caller can keep writing and summing.
-	dig := new(digest)
-	*dig = *d
-
-	// Padding. Add padding bytes to make the total length a multiple of BlockSize.
-	paddingSize := BlockSize - dig.nx
-
-	// Use precomputed padding table to avoid allocation
-	dig.Write(paddingTable[paddingSize-1][:paddingSize])
-	dig.Write(dig.digest[:])
-	return append(in, dig.state[:HashSize]...)
+	return nil
 }
+
+// Padding. Add padding bytes to make the total length a multiple of BlockSize.
+
+// Use precomputed padding table to avoid allocation
 
 // block processes a single block of data according to the MD2 algorithm.
 // This is the core hash function that performs the actual MD2 computation.
@@ -157,39 +132,34 @@ func (d *digest) Sum(in []byte) []byte {
 // 2. Process state buffer through S-box substitution
 // 3. Update digest using input block and current digest
 func (d *digest) block(p []byte) {
-	var t uint8
+	_ = "STUB: not implemented"
 
 	// Step 1: Copy input block to state buffer and compute checksum
 	// Copy the 16-byte input block to positions 16-31 of the state buffer
 	// Also compute XOR of input block with current state for positions 32-47
 	// Use copy for better performance on the first part
-	copy(d.state[16:32], p[:16])
-
-	// Manually compute XOR for state[32:48]
-	for i := range 16 {
-		d.state[i+32] = p[i] ^ d.state[i] // XOR input with current state for state[32:48]
-	}
-
-	// Step 2: Process state buffer through S-box substitution
-	// Perform 18 rounds of S-box substitution on the entire 48-byte state buffer
-	// Each round uses the current value of t as an index into the S-box
-	for i := range 18 {
-		for j := range 48 {
-			d.state[j] = d.state[j] ^ sBox[t] // XOR state byte with S-box value
-			t = d.state[j]                    // Update t with the new state value
-		}
-		t = t + uint8(i) // Add round number to t for the next round
-	}
-
-	// Step 3: Update digest using input block and current digest
-	// Initialize t with the last byte of the current digest
-	// This creates a feedback mechanism that incorporates the current hash state
-	t = d.digest[15]
-
-	// Process each byte of the input block to update the digest
-	// Use the input byte XORed with t as an index into the S-box
-	for i := range 16 {
-		d.digest[i] = d.digest[i] ^ sBox[p[i]^t] // XOR digest byte with S-box value
-		t = d.digest[i]                          // Update t with the new digest value
-	}
+	return
 }
+
+// Manually compute XOR for state[32:48]
+
+// XOR input with current state for state[32:48]
+
+// Step 2: Process state buffer through S-box substitution
+// Perform 18 rounds of S-box substitution on the entire 48-byte state buffer
+// Each round uses the current value of t as an index into the S-box
+
+// XOR state byte with S-box value
+// Update t with the new state value
+
+// Add round number to t for the next round
+
+// Step 3: Update digest using input block and current digest
+// Initialize t with the last byte of the current digest
+// This creates a feedback mechanism that incorporates the current hash state
+
+// Process each byte of the input block to update the digest
+// Use the input byte XORed with t as an index into the S-box
+
+// XOR digest byte with S-box value
+// Update t with the new digest value

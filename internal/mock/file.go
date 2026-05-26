@@ -1,7 +1,6 @@
 package mock
 
 import (
-	"errors"
 	"io"
 	"io/fs"
 	"os"
@@ -21,120 +20,68 @@ type File struct {
 // NewFile creates a new mock file with the specified data and name.
 // This function is commonly used in tests to create file-like objects
 // that can be passed to functions expecting file interfaces.
-func NewFile(data []byte, name string) *File {
-	return &File{data: data, name: name}
-}
+func NewFile(data []byte, name string) *File { _ = "STUB: not implemented"; return nil }
 
 // Read implements the io.Reader interface for mock file operations.
 // It reads data from the current position and advances the position accordingly.
 // Returns os.ErrClosed if the file has been closed, or io.EOF when reaching the end.
-func (f *File) Read(p []byte) (int, error) {
-	if f.closed {
-		return 0, os.ErrClosed
-	}
-	if f.pos >= int64(len(f.data)) {
-		return 0, io.EOF
-	}
-	n := copy(p, f.data[f.pos:])
-	f.pos += int64(n)
-	return n, nil
-}
+func (f *File) Read(p []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Close implements the io.Closer interface for mock file operations.
 // Marks the file as closed, preventing further read operations.
-func (f *File) Close() error {
-	f.closed = true
-	return nil
-}
+func (f *File) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Stat returns file information for the mock file.
 // Creates a fileInfo object with the file's name and size based on data length.
 func (f *File) Stat() (os.FileInfo, error) {
-	return &fileInfo{name: f.name, size: int64(len(f.data))}, nil
+	_ = "STUB: not implemented"
+	return *new(os.FileInfo), nil
 }
 
 // ReadDir implements the fs.ReadDirFile interface.
 // Since this mock represents a regular file, not a directory, it always returns an error.
 func (f *File) ReadDir(count int) ([]fs.DirEntry, error) {
-	return nil, errors.New("not a directory")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Seek implements the io.Seeker interface for mock file operations.
 // Allows positioning the file pointer at different locations within the file.
 // Supports seeking from start, current position, or end of file.
 func (f *File) Seek(offset int64, whence int) (int64, error) {
-	if f.closed {
-		return 0, os.ErrClosed
-	}
-
-	var newPos int64
-	switch whence {
-	case io.SeekStart:
-		newPos = offset
-	case io.SeekCurrent:
-		newPos = f.pos + offset
-	case io.SeekEnd:
-		newPos = int64(len(f.data)) + offset
-	default:
-		return 0, errors.New("invalid whence")
-	}
-
-	if newPos < 0 {
-		return 0, errors.New("negative position")
-	}
-
-	f.pos = newPos
-	return f.pos, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Write implements the io.Writer interface for mock file operations.
 // It writes data to the current position and advances the position accordingly.
 // If writing beyond the current data length, the file is extended.
 // Returns os.ErrClosed if the file has been closed.
-func (f *File) Write(p []byte) (n int, err error) {
-	if f.closed {
-		return 0, os.ErrClosed
-	}
+func (f *File) Write(p []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
-	// If writing beyond current data length, extend the data slice
-	if f.pos+int64(len(p)) > int64(len(f.data)) {
-		newData := make([]byte, f.pos+int64(len(p)))
-		copy(newData, f.data)
-		f.data = newData
-	}
+// If writing beyond current data length, extend the data slice
 
-	// Write data at current position
-	copy(f.data[f.pos:], p)
-	f.pos += int64(len(p))
+// Write data at current position
 
-	// If we wrote at position 0 and the new data is shorter than the original,
-	// truncate the data to avoid keeping old content
-	if f.pos == int64(len(p)) && f.pos < int64(len(f.data)) {
-		f.data = f.data[:f.pos]
-	}
-
-	return len(p), nil
-}
+// If we wrote at position 0 and the new data is shorter than the original,
+// truncate the data to avoid keeping old content
 
 // Bytes returns the current file content (for testing)
 func (f *File) Bytes() []byte {
-	return f.data
+	_ = "STUB: not implemented"
+
+	// Reset resets the file position to the beginning
+	return nil
 }
 
-// Reset resets the file position to the beginning
 func (f *File) Reset() {
-	f.pos = 0
+	_ = "STUB: not implemented"
+
+	// Truncate truncates the file to the specified size
+	return
 }
 
-// Truncate truncates the file to the specified size
-func (f *File) Truncate(n int) {
-	if n < len(f.data) {
-		f.data = f.data[:n]
-		if f.pos > int64(n) {
-			f.pos = int64(n)
-		}
-	}
-}
+func (f *File) Truncate(n int) { _ = "STUB: not implemented"; return }
 
 // ErrorFile is a mock file implementation that always returns errors.
 // This is useful for testing error handling paths in code that operates on files.
@@ -144,67 +91,101 @@ type ErrorFile struct {
 
 // NewErrorFile creates a new error file that will return the specified error
 // for all file operations. This is commonly used to test error scenarios.
-func NewErrorFile(err error) *ErrorFile {
-	return &ErrorFile{err: err}
-}
+func NewErrorFile(err error) *ErrorFile { _ = "STUB: not implemented"; return nil }
 
 // Read always returns the configured error, simulating a file read failure.
 func (e *ErrorFile) Read(p []byte) (int, error) {
-	return 0, e.err
+	_ = "STUB: not implemented"
+
+	// Close always returns the configured error, simulating a file close failure.
+	return 0, nil
 }
 
-// Close always returns the configured error, simulating a file close failure.
 func (e *ErrorFile) Close() error {
-	return e.err
+	_ = "STUB: not implemented"
+
+	// Stat always returns the configured error, simulating a file stat failure.
+	return nil
 }
 
-// Stat always returns the configured error, simulating a file stat failure.
 func (e *ErrorFile) Stat() (os.FileInfo, error) {
-	return nil, e.err
+	_ = "STUB: not implemented"
+
+	// ReadDir always returns the configured error, simulating a directory read failure.
+	return *new(os.FileInfo), nil
 }
 
-// ReadDir always returns the configured error, simulating a directory read failure.
 func (e *ErrorFile) ReadDir(count int) ([]fs.DirEntry, error) {
-	return nil, e.err
+	_ = "STUB: not implemented"
+
+	// Seek always returns the configured error, simulating a file seek failure.
+	return nil, nil
 }
 
-// Seek always returns the configured error, simulating a file seek failure.
 func (e *ErrorFile) Seek(offset int64, whence int) (int64, error) {
-	return 0, e.err
+	_ = "STUB: not implemented"
+
+	// Write always returns the configured error, simulating a file write failure.
+	return 0, nil
 }
 
-// Write always returns the configured error, simulating a file write failure.
 func (e *ErrorFile) Write(p []byte) (n int, err error) {
-	return 0, e.err
+	_ = "STUB: not implemented"
+
+	// fileInfo implements the os.FileInfo interface for mock file information.
+	// Provides basic file metadata for mock files used in testing.
+	return 0, nil
 }
 
-// fileInfo implements the os.FileInfo interface for mock file information.
-// Provides basic file metadata for mock files used in testing.
 type fileInfo struct {
 	name string // File name
 	size int64  // File size in bytes
 }
 
 // Name returns the file name.
-func (f *fileInfo) Name() string { return f.name }
+func (f *fileInfo) Name() string {
+	_ = "STUB: not implemented"
 
-// Size returns the file size in bytes.
-func (f *fileInfo) Size() int64 { return f.size }
+	// Size returns the file size in bytes.
+	return ""
+}
 
-// Mode returns a read-only file mode (0444) for mock files.
-func (f *fileInfo) Mode() os.FileMode { return 0444 }
+func (f *fileInfo) Size() int64 {
+	_ = "STUB: not implemented"
 
-// ModTime returns a zero time value for mock files.
-func (f *fileInfo) ModTime() time.Time { return time.Time{} }
+	// Mode returns a read-only file mode (0444) for mock files.
+	return 0
+}
 
-// IsDir returns false since mock files represent regular files, not directories.
-func (f *fileInfo) IsDir() bool { return false }
+func (f *fileInfo) Mode() os.FileMode {
+	_ = "STUB: not implemented"
 
-// Sys returns nil for mock files as they don't have underlying system-specific data.
-func (f *fileInfo) Sys() interface{} { return nil }
+	// ModTime returns a zero time value for mock files.
+	return *new(os.FileMode)
+}
 
-// WriteCloser is a mock implementation of io.WriteCloser for testing purposes.
-// It wraps an io.Writer and adds close functionality with state tracking.
+func (f *fileInfo) ModTime() time.Time {
+	_ = "STUB: not implemented"
+
+	// IsDir returns false since mock files represent regular files, not directories.
+	return *new(time.Time)
+}
+
+func (f *fileInfo) IsDir() bool {
+	_ = "STUB: not implemented"
+
+	// Sys returns nil for mock files as they don't have underlying system-specific data.
+	return false
+}
+
+func (f *fileInfo) Sys() interface{} {
+	_ = "STUB: not implemented"
+
+	// WriteCloser is a mock implementation of io.WriteCloser for testing purposes.
+	// It wraps an io.Writer and adds close functionality with state tracking.
+	return nil
+}
+
 type WriteCloser struct {
 	w      io.Writer // Underlying writer to delegate writes to
 	closed bool      // Whether the WriteCloser has been closed
@@ -212,28 +193,15 @@ type WriteCloser struct {
 
 // NewWriteCloser creates a new mock WriteCloser that wraps the provided io.Writer.
 // This is useful for testing code that requires both write and close operations.
-func NewWriteCloser(w io.Writer) *WriteCloser {
-	return &WriteCloser{w: w}
-}
+func NewWriteCloser(w io.Writer) *WriteCloser { _ = "STUB: not implemented"; return nil }
 
 // Write implements the io.Writer interface by delegating to the underlying writer.
 // Returns os.ErrClosed if the WriteCloser has been closed.
-func (w *WriteCloser) Write(p []byte) (n int, err error) {
-	if w.closed {
-		return 0, os.ErrClosed
-	}
-	return w.w.Write(p)
-}
+func (w *WriteCloser) Write(p []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Close implements the io.Closer interface for the mock WriteCloser.
 // Marks the WriteCloser as closed and prevents further write operations.
-func (w *WriteCloser) Close() error {
-	if w.closed {
-		return os.ErrClosed
-	}
-	w.closed = true
-	return nil
-}
+func (w *WriteCloser) Close() error { _ = "STUB: not implemented"; return nil }
 
 // ErrorWriteCloser is a mock io.WriteCloser that always returns errors.
 // Useful for testing error handling in code that writes to files or other writers.
@@ -243,22 +211,24 @@ type ErrorWriteCloser struct {
 
 // NewErrorWriteCloser creates a new error WriteCloser that will return
 // the specified error for all write and close operations.
-func NewErrorWriteCloser(err error) *ErrorWriteCloser {
-	return &ErrorWriteCloser{err: err}
-}
+func NewErrorWriteCloser(err error) *ErrorWriteCloser { _ = "STUB: not implemented"; return nil }
 
 // Write always returns the configured error, simulating a write failure.
 func (e *ErrorWriteCloser) Write(p []byte) (n int, err error) {
-	return 0, e.err
+	_ = "STUB: not implemented"
+
+	// Close always returns the configured error, simulating a close failure.
+	return 0, nil
 }
 
-// Close always returns the configured error, simulating a close failure.
 func (e *ErrorWriteCloser) Close() error {
-	return e.err
+	_ = "STUB: not implemented"
+
+	// CloseErrorWriteCloser is a mock io.WriteCloser where only the Close() method returns an error.
+	// This is useful for testing scenarios where writes succeed but closing fails.
+	return nil
 }
 
-// CloseErrorWriteCloser is a mock io.WriteCloser where only the Close() method returns an error.
-// This is useful for testing scenarios where writes succeed but closing fails.
 type CloseErrorWriteCloser struct {
 	w   io.Writer // Underlying writer for successful write operations
 	err error     // Error to return when Close() is called
@@ -267,24 +237,30 @@ type CloseErrorWriteCloser struct {
 // NewCloseErrorWriteCloser creates a new WriteCloser that writes successfully
 // but returns an error when Close() is called. This simulates partial failure scenarios.
 func NewCloseErrorWriteCloser(w io.Writer, err error) *CloseErrorWriteCloser {
-	return &CloseErrorWriteCloser{w: w, err: err}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Write implements the io.Writer interface by delegating to the underlying writer.
 // This method always succeeds, allowing testing of close error scenarios.
 func (c *CloseErrorWriteCloser) Write(p []byte) (n int, err error) {
-	return c.w.Write(p)
+	_ = "STUB: not implemented"
+	return 0,
+
+		// Close always returns the configured error, simulating a close failure
+		// while allowing writes to succeed.
+		nil
 }
 
-// Close always returns the configured error, simulating a close failure
-// while allowing writes to succeed.
 func (c *CloseErrorWriteCloser) Close() error {
-	return c.err
+	_ = "STUB: not implemented"
+
+	// ErrorReadWriteCloser is a mock that implements io.Reader, io.Writer, and io.Closer interfaces,
+	// always returning the specified error for all operations. This is useful for testing
+	// scenarios where all I/O operations fail, such as network failures or corrupted streams.
+	return nil
 }
 
-// ErrorReadWriteCloser is a mock that implements io.Reader, io.Writer, and io.Closer interfaces,
-// always returning the specified error for all operations. This is useful for testing
-// scenarios where all I/O operations fail, such as network failures or corrupted streams.
 type ErrorReadWriteCloser struct {
 	Err error // The error to return for all read, write, and close operations
 }
@@ -294,25 +270,38 @@ type ErrorReadWriteCloser struct {
 // particularly useful for testing error handling in streaming operations where
 // all I/O methods need to fail consistently.
 func NewErrorReadWriteCloser(err error) *ErrorReadWriteCloser {
-	return &ErrorReadWriteCloser{Err: err}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Read always returns the configured error, simulating a read failure.
 // This method implements the io.Reader interface for consistent error testing.
-func (e *ErrorReadWriteCloser) Read(p []byte) (int, error) { return 0, e.Err }
+func (e *ErrorReadWriteCloser) Read(p []byte) (int, error) {
+	_ = "STUB: not implemented"
 
-// Write always returns the configured error, simulating a write failure.
-// This method implements the io.Writer interface for consistent error testing.
-func (e *ErrorReadWriteCloser) Write(p []byte) (int, error) { return 0, e.Err }
+	// Write always returns the configured error, simulating a write failure.
+	// This method implements the io.Writer interface for consistent error testing.
+	return 0, nil
+}
 
-// Close always returns the configured error, simulating a close failure.
-// This method implements the io.Closer interface for consistent error testing.
-func (e *ErrorReadWriteCloser) Close() error { return e.Err }
+func (e *ErrorReadWriteCloser) Write(p []byte) (int, error) {
+	_ = "STUB: not implemented"
 
-// ErrorWriteAfterN is a mock io.Writer that succeeds for the first N writes
-// and then returns an error for all subsequent writes. This is useful for testing
-// scenarios where a writer works initially but fails after a certain number of operations,
-// such as disk full errors or connection drops.
+	// Close always returns the configured error, simulating a close failure.
+	// This method implements the io.Closer interface for consistent error testing.
+	return 0, nil
+}
+
+func (e *ErrorReadWriteCloser) Close() error {
+	_ = "STUB: not implemented"
+
+	// ErrorWriteAfterN is a mock io.Writer that succeeds for the first N writes
+	// and then returns an error for all subsequent writes. This is useful for testing
+	// scenarios where a writer works initially but fails after a certain number of operations,
+	// such as disk full errors or connection drops.
+	return nil
+}
+
 type ErrorWriteAfterN struct {
 	N          int   // Number of successful writes before returning error
 	Err        error // The error to return after N successful writes
@@ -323,39 +312,20 @@ type ErrorWriteAfterN struct {
 // NewErrorWriteAfterN creates a new ErrorWriteAfterN that will allow N successful
 // writes before returning the specified error. This is commonly used to test partial
 // write scenarios and error recovery in streaming operations.
-func NewErrorWriteAfterN(n int, err error) *ErrorWriteAfterN {
-	return &ErrorWriteAfterN{
-		N:   n,
-		Err: err,
-	}
-}
+func NewErrorWriteAfterN(n int, err error) *ErrorWriteAfterN { _ = "STUB: not implemented"; return nil }
 
 // Write implements the io.Writer interface. It succeeds for the first N calls
 // and returns the configured error for all subsequent calls.
-func (e *ErrorWriteAfterN) Write(p []byte) (int, error) {
-	e.writeCount++
-	if e.writeCount > e.N {
-		return 0, e.Err
-	}
-	e.totalBytes += len(p)
-	return len(p), nil
-}
+func (e *ErrorWriteAfterN) Write(p []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // WriteCount returns the number of write operations attempted (for testing).
-func (e *ErrorWriteAfterN) WriteCount() int {
-	return e.writeCount
-}
+func (e *ErrorWriteAfterN) WriteCount() int { _ = "STUB: not implemented"; return 0 }
 
 // TotalBytes returns the total number of bytes successfully written (for testing).
-func (e *ErrorWriteAfterN) TotalBytes() int {
-	return e.totalBytes
-}
+func (e *ErrorWriteAfterN) TotalBytes() int { _ = "STUB: not implemented"; return 0 }
 
 // Reset resets the write counter and total bytes, allowing the mock to be reused.
-func (e *ErrorWriteAfterN) Reset() {
-	e.writeCount = 0
-	e.totalBytes = 0
-}
+func (e *ErrorWriteAfterN) Reset() { _ = "STUB: not implemented"; return }
 
 // CloseErrorReadCloser is a mock io.ReadCloser where only the Close() method returns an error.
 // This is useful for testing scenarios where reads succeed but closing fails.
@@ -367,17 +337,19 @@ type CloseErrorReadCloser struct {
 // NewCloseErrorReadCloser creates a new ReadCloser that reads successfully
 // but returns an error when Close() is called. This simulates partial failure scenarios.
 func NewCloseErrorReadCloser(r io.Reader, err error) *CloseErrorReadCloser {
-	return &CloseErrorReadCloser{r: r, err: err}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Read implements the io.Reader interface by delegating to the underlying reader.
 // This method always succeeds, allowing testing of close error scenarios.
 func (c *CloseErrorReadCloser) Read(p []byte) (int, error) {
-	return c.r.Read(p)
+	_ = "STUB: not implemented"
+	return 0,
+
+		// Close always returns the configured error, simulating a close failure
+		// while allowing reads to succeed.
+		nil
 }
 
-// Close always returns the configured error, simulating a close failure
-// while allowing reads to succeed.
-func (c *CloseErrorReadCloser) Close() error {
-	return c.err
-}
+func (c *CloseErrorReadCloser) Close() error { _ = "STUB: not implemented"; return nil }

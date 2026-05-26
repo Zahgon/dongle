@@ -1,12 +1,8 @@
 package crypto
 
 import (
-	"bytes"
 	"io"
 	"io/fs"
-
-	"github.com/dromara/dongle/coding"
-	"github.com/dromara/dongle/internal/utils"
 )
 
 // Encrypter defines a Encrypter struct.
@@ -19,77 +15,54 @@ type Encrypter struct {
 
 // NewEncrypter returns a new Encrypter instance.
 func NewEncrypter() Encrypter {
-	return Encrypter{}
+	_ = "STUB: not implemented"
+
+	// FromString encrypts from string.
+	return *new(Encrypter)
 }
 
-// FromString encrypts from string.
 func (e Encrypter) FromString(s string) Encrypter {
-	e.src = utils.String2Bytes(s)
-	return e
+	_ = "STUB: not implemented"
+	return *new(Encrypter)
 }
 
 // FromBytes encrypts from byte slice.
 func (e Encrypter) FromBytes(b []byte) Encrypter {
-	e.src = b
-	return e
+	_ = "STUB: not implemented"
+	return *
+
+	// FromFile encrypts from file.
+	new(Encrypter)
 }
 
-// FromFile encrypts from file.
 func (e Encrypter) FromFile(f fs.File) Encrypter {
-	e.reader = f
-	return e
+	_ = "STUB: not implemented"
+	return *
+
+	// ToRawString outputs as raw string.
+	new(Encrypter)
 }
 
-// ToRawString outputs as raw string.
-func (e Encrypter) ToRawString() string {
-	return utils.Bytes2String(e.dst)
-}
+func (e Encrypter) ToRawString() string { _ = "STUB: not implemented"; return "" }
 
 // ToRawBytes outputs as raw byte slice.
-func (e Encrypter) ToRawBytes() []byte {
-	if len(e.dst) == 0 {
-		return []byte{}
-	}
-	return e.dst
-}
+func (e Encrypter) ToRawBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // ToBase64String outputs as base64 string.
-func (e Encrypter) ToBase64String() string {
-	return coding.NewEncoder().FromBytes(e.dst).ByBase64().ToString()
-}
+func (e Encrypter) ToBase64String() string { _ = "STUB: not implemented"; return "" }
 
 // ToBase64Bytes outputs as base64 byte slice.
-func (e Encrypter) ToBase64Bytes() []byte {
-	return coding.NewEncoder().FromBytes(e.dst).ByBase64().ToBytes()
-}
+func (e Encrypter) ToBase64Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // ToHexString outputs as hex string.
-func (e Encrypter) ToHexString() string {
-	return coding.NewEncoder().FromBytes(e.dst).ByHex().ToString()
-}
+func (e Encrypter) ToHexString() string { _ = "STUB: not implemented"; return "" }
 
 // ToHexBytes outputs as hex byte slice.
-func (e Encrypter) ToHexBytes() []byte {
-	return coding.NewEncoder().FromBytes(e.dst).ByHex().ToBytes()
-}
+func (e Encrypter) ToHexBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 func (e Encrypter) stream(fn func(io.Writer) io.WriteCloser) ([]byte, error) {
-	var buf bytes.Buffer
-	encrypter := fn(&buf)
-
-	// Try to reset the reader position if it's a seeker
-	if seeker, ok := e.reader.(io.Seeker); ok {
-		seeker.Seek(0, io.SeekStart)
-	}
-	if _, err := io.CopyBuffer(encrypter, e.reader, make([]byte, BufferSize)); err != nil && err != io.EOF {
-		encrypter.Close()
-		return []byte{}, err
-	}
-	if err := encrypter.Close(); err != nil {
-		return []byte{}, err
-	}
-	if buf.Len() == 0 {
-		return []byte{}, nil
-	}
-	return buf.Bytes(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Try to reset the reader position if it's a seeker

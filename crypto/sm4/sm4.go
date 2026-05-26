@@ -5,7 +5,6 @@ package sm4
 
 import (
 	stdCipher "crypto/cipher"
-	"github.com/dromara/dongle/crypto/internal/sm4"
 	"io"
 
 	"github.com/dromara/dongle/crypto/cipher"
@@ -19,37 +18,16 @@ type StdEncrypter struct {
 }
 
 // NewStdEncrypter creates a new SM4 encrypter with the specified cipher and key.
-func NewStdEncrypter(c *cipher.Sm4Cipher) *StdEncrypter {
-	e := &StdEncrypter{
-		cipher: *c,
-	}
-	if len(c.Key) != sm4.KeySize {
-		e.Error = KeySizeError(len(c.Key))
-		return e
-	}
-	e.block = sm4.NewCipher(c.Key)
-	return e
-}
+func NewStdEncrypter(c *cipher.Sm4Cipher) *StdEncrypter { _ = "STUB: not implemented"; return nil }
 
 // Encrypt encrypts the given byte slice using SM4 encryption.
 func (e *StdEncrypter) Encrypt(src []byte) (dst []byte, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if e.Error != nil {
-		err = e.Error
-		return
-	}
-
-	// Return empty data for empty input
-	if len(src) == 0 {
-		return
-	}
-
-	dst, err = e.cipher.Encrypt(src, e.block)
-	if err != nil {
-		err = EncryptError{Err: err}
-	}
-	return
+	return nil, nil
 }
+
+// Return empty data for empty input
 
 // StdDecrypter represents an SM4 decrypter for standard decryption operations.
 type StdDecrypter struct {
@@ -59,37 +37,16 @@ type StdDecrypter struct {
 }
 
 // NewStdDecrypter creates a new SM4 decrypter with the specified cipher and key.
-func NewStdDecrypter(c *cipher.Sm4Cipher) *StdDecrypter {
-	d := &StdDecrypter{
-		cipher: *c,
-	}
-	if len(c.Key) != sm4.KeySize {
-		d.Error = KeySizeError(len(c.Key))
-		return d
-	}
-	d.block = sm4.NewCipher(c.Key)
-	return d
-}
+func NewStdDecrypter(c *cipher.Sm4Cipher) *StdDecrypter { _ = "STUB: not implemented"; return nil }
 
 // Decrypt decrypts the given byte slice using SM4 decryption.
 func (d *StdDecrypter) Decrypt(src []byte) (dst []byte, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if d.Error != nil {
-		err = d.Error
-		return
-	}
-
-	// Return empty data for empty input
-	if len(src) == 0 {
-		return
-	}
-
-	dst, err = d.cipher.Decrypt(src, d.block)
-	if err != nil {
-		err = DecryptError{Err: err}
-	}
-	return
+	return nil, nil
 }
+
+// Return empty data for empty input
 
 // StreamEncrypter represents a streaming SM4 encrypter that implements io.WriteCloser.
 type StreamEncrypter struct {
@@ -104,61 +61,30 @@ type StreamEncrypter struct {
 // to the provided io.Writer. The encrypter uses the specified cipher interface
 // and validates the key length for proper SM4 encryption.
 func NewStreamEncrypter(w io.Writer, c *cipher.Sm4Cipher) io.WriteCloser {
-	e := &StreamEncrypter{
-		writer: w,
-		cipher: *c,
-		buffer: make([]byte, 0, sm4.BlockSize), // SM4 block size is 16 bytes
-	}
-	if len(c.Key) != sm4.KeySize {
-		e.Error = KeySizeError(len(c.Key))
-		return e
-	}
-	e.block = sm4.NewCipher(c.Key)
-	return e
+	_ = "STUB: not implemented"
+	return *new(io.WriteCloser)
 }
+
+// SM4 block size is 16 bytes
 
 // Write implements the io.Writer interface for streaming SM4 encryption.
 func (e *StreamEncrypter) Write(src []byte) (n int, err error) {
-	if e.Error != nil {
-		return 0, e.Error
-	}
-	if len(src) == 0 {
-		return 0, nil
-	}
-
-	// Combine any leftover bytes from previous write with new data
-	data := append(e.buffer, src...)
-	e.buffer = nil // Clear buffer after combining
-
-	// Use the cipher interface to encrypt data (maintains compatibility with tests)
-	encrypted, err := e.cipher.Encrypt(data, e.block)
-	if err != nil {
-		return 0, EncryptError{Err: err}
-	}
-
-	// Write encrypted data to the underlying writer
-	if _, err = e.writer.Write(encrypted); err != nil {
-		return 0, err
-	}
-
-	return len(src), nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
+// Combine any leftover bytes from previous write with new data
+
+// Clear buffer after combining
+
+// Use the cipher interface to encrypt data (maintains compatibility with tests)
+
+// Write encrypted data to the underlying writer
 
 // Close implements the io.Closer interface for the streaming SM4 encrypter.
-func (e *StreamEncrypter) Close() error {
-	if e.Error != nil {
-		return e.Error
-	}
-	// Close the underlying writer if it implements io.Closer
-	if closer, ok := e.writer.(io.Closer); ok {
-		err := closer.Close()
-		if err != nil {
-			err = EncryptError{Err: err}
-		}
-		return err
-	}
-	return nil
-}
+func (e *StreamEncrypter) Close() error { _ = "STUB: not implemented"; return nil }
+
+// Close the underlying writer if it implements io.Closer
 
 // StreamDecrypter represents a streaming SM4 decrypter that implements io.Reader.
 type StreamDecrypter struct {
@@ -174,60 +100,26 @@ type StreamDecrypter struct {
 // from the provided io.Reader. The decrypter uses the specified cipher interface
 // and validates the key length for proper SM4 decryption.
 func NewStreamDecrypter(r io.Reader, c *cipher.Sm4Cipher) io.Reader {
-	d := &StreamDecrypter{
-		reader:   r,
-		cipher:   c,
-		buffer:   nil, // Will be populated on first read
-		position: 0,
-	}
-	if len(c.Key) != sm4.KeySize {
-		d.Error = KeySizeError(len(c.Key))
-		return d
-	}
-	d.block = sm4.NewCipher(c.Key)
-	return d
+	_ = "STUB: not implemented"
+	return *new(io.Reader)
 }
+
+// Will be populated on first read
 
 // Read implements the io.Reader interface for streaming SM4 decryption.
 func (d *StreamDecrypter) Read(dst []byte) (n int, err error) {
-	if d.Error != nil {
-		return 0, d.Error
-	}
-
-	// If we haven't decrypted the data yet, do it now
-	if d.buffer == nil {
-		// Read all encrypted data from the underlying reader
-		encryptedData, err := io.ReadAll(d.reader)
-		if err != nil {
-			d.Error = ReadError{Err: err}
-			return 0, d.Error
-		}
-
-		// If no data to decrypt, return EOF
-		if len(encryptedData) == 0 {
-			return 0, io.EOF
-		}
-
-		// Use the cipher interface to decrypt data (maintains compatibility with tests)
-		decrypted, err := d.cipher.Decrypt(encryptedData, d.block)
-		if err != nil {
-			d.Error = DecryptError{Err: err}
-			return 0, d.Error
-		}
-
-		d.buffer = decrypted
-		d.position = 0
-	}
-
-	// If we've already returned all decrypted data, return EOF
-	if d.position >= len(d.buffer) {
-		return 0, io.EOF
-	}
-
-	// Copy as much decrypted data as possible to the provided buffer
-	remainingData := d.buffer[d.position:]
-	copied := copy(dst, remainingData)
-	d.position += copied
-
-	return copied, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
+// If we haven't decrypted the data yet, do it now
+
+// Read all encrypted data from the underlying reader
+
+// If no data to decrypt, return EOF
+
+// Use the cipher interface to decrypt data (maintains compatibility with tests)
+
+// If we've already returned all decrypted data, return EOF
+
+// Copy as much decrypted data as possible to the provided buffer

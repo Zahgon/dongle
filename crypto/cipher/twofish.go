@@ -6,9 +6,4 @@ type TwofishCipher struct {
 }
 
 // NewTwofishCipher returns a new TwofishCipher instance.
-func NewTwofishCipher(block BlockMode) *TwofishCipher {
-	c := &TwofishCipher{}
-	c.Block = block
-	c.Padding = No
-	return c
-}
+func NewTwofishCipher(block BlockMode) *TwofishCipher { _ = "STUB: not implemented"; return nil }

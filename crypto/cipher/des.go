@@ -6,9 +6,4 @@ type DesCipher struct {
 }
 
 // NewDesCipher returns a new DesCipher instance.
-func NewDesCipher(block BlockMode) *DesCipher {
-	c := &DesCipher{}
-	c.Block = block
-	c.Padding = No
-	return c
-}
+func NewDesCipher(block BlockMode) *DesCipher { _ = "STUB: not implemented"; return nil }

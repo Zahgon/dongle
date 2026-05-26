@@ -1,27 +1,19 @@
 package ed25519
 
-import "fmt"
-
 type SignError struct {
 	Err error
 }
 
-func (e SignError) Error() string {
-	return fmt.Sprintf("crypto/ed25519: failed to sign data: %v", e.Err)
-}
+func (e SignError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type VerifyError struct {
 	Err error
 }
 
-func (e VerifyError) Error() string {
-	return fmt.Sprintf("crypto/ed25519: failed to verify signature: %v", e.Err)
-}
+func (e VerifyError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type ReadError struct {
 	Err error
 }
 
-func (e ReadError) Error() string {
-	return fmt.Sprintf("crypto/ed25519: failed to read data: %v", e.Err)
-}
+func (e ReadError) Error() string { _ = "STUB: not implemented"; return "" }

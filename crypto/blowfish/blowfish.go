@@ -8,7 +8,6 @@ import (
 	"io"
 
 	"github.com/dromara/dongle/crypto/cipher"
-	"golang.org/x/crypto/blowfish"
 )
 
 // StdEncrypter represents a Blowfish encrypter for standard encryption operations.
@@ -23,49 +22,23 @@ type StdEncrypter struct {
 // Validates the key length and cipher mode, then initializes the encrypter for Blowfish encryption operations.
 // The key must be between 32 and 448 bits (4 to 56 bytes).
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
-func NewStdEncrypter(c *cipher.BlowfishCipher) *StdEncrypter {
-	e := &StdEncrypter{
-		cipher: *c,
-	}
+func NewStdEncrypter(c *cipher.BlowfishCipher) *StdEncrypter { _ = "STUB: not implemented"; return nil }
 
-	if len(c.Key) < 4 || len(c.Key) > 56 {
-		e.Error = KeySizeError(len(c.Key))
-		return e
-	}
-
-	// Check for unsupported block mode
-	if c.Block == cipher.GCM {
-		e.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return e
-	}
-
-	return e
-}
+// Check for unsupported block mode
 
 // Encrypt encrypts the given byte slice using Blowfish encryption.
 // Creates a Blowfish cipher block and uses the configured cipher interface
 // to perform the encryption operation with proper error handling.
 // Returns empty data when input is empty.
 func (e *StdEncrypter) Encrypt(src []byte) (dst []byte, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if e.Error != nil {
-		err = e.Error
-		return
-	}
-
-	// Return empty data for empty input
-	if len(src) == 0 {
-		return
-	}
-
-	// Create Blowfish cipher block using the provided key
-	block, err := blowfish.NewCipher(e.cipher.Key)
-	if err != nil {
-		err = EncryptError{Err: err}
-		return
-	}
-	return e.cipher.Encrypt(src, block)
+	return nil, nil
 }
+
+// Return empty data for empty input
+
+// Create Blowfish cipher block using the provided key
 
 // StdDecrypter represents a Blowfish decrypter for standard decryption operations.
 // It implements Blowfish decryption using the standard Blowfish algorithm with support
@@ -79,50 +52,23 @@ type StdDecrypter struct {
 // Validates the key length and cipher mode, then initializes the decrypter for Blowfish decryption operations.
 // The key must be between 32 and 448 bits (4 to 56 bytes).
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
-func NewStdDecrypter(c *cipher.BlowfishCipher) *StdDecrypter {
-	d := &StdDecrypter{
-		cipher: *c,
-	}
+func NewStdDecrypter(c *cipher.BlowfishCipher) *StdDecrypter { _ = "STUB: not implemented"; return nil }
 
-	if len(c.Key) < 4 || len(c.Key) > 56 {
-		d.Error = KeySizeError(len(c.Key))
-		return d
-	}
-
-	// Check for unsupported block mode
-	if c.Block == cipher.GCM {
-		d.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return d
-	}
-
-	return d
-}
+// Check for unsupported block mode
 
 // Decrypt decrypts the given byte slice using Blowfish decryption.
 // Creates a Blowfish cipher block and uses the configured cipher interface
 // to perform the decryption operation with proper error handling.
 // Returns empty data when input is empty.
 func (d *StdDecrypter) Decrypt(src []byte) (dst []byte, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if d.Error != nil {
-		err = d.Error
-		return
-	}
-
-	// Return empty data for empty input
-	if len(src) == 0 {
-		return
-	}
-
-	// Create Blowfish cipher block using the provided key
-	block, err := blowfish.NewCipher(d.cipher.Key)
-	if err != nil {
-		err = DecryptError{Err: err}
-		return
-	}
-
-	return d.cipher.Decrypt(src, block)
+	return nil, nil
 }
+
+// Return empty data for empty input
+
+// Create Blowfish cipher block using the provided key
 
 // StreamEncrypter represents a streaming Blowfish encrypter that implements io.WriteCloser.
 // It provides efficient encryption for large data streams by processing data
@@ -140,84 +86,48 @@ type StreamEncrypter struct {
 // and validates the key length and cipher mode for proper Blowfish encryption.
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
 func NewStreamEncrypter(w io.Writer, c *cipher.BlowfishCipher) io.WriteCloser {
-	e := &StreamEncrypter{
-		writer: w,
-		cipher: *c,
-		buffer: make([]byte, 0, 8), // Blowfish block size is 8 bytes
-	}
-
-	if len(c.Key) < 4 || len(c.Key) > 56 {
-		e.Error = KeySizeError(len(c.Key))
-		return e
-	}
-
-	// Check for unsupported block mode
-	if c.Block == cipher.GCM {
-		e.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return e
-	}
-
-	e.block, e.Error = blowfish.NewCipher(c.Key)
-	return e
+	_ = "STUB: not implemented"
+	return *new(io.WriteCloser)
 }
+
+// Blowfish block size is 8 bytes
+
+// Check for unsupported block mode
 
 // Write implements the io.Writer interface for streaming Blowfish encryption.
 // Provides improved performance through cipher block reuse while maintaining compatibility.
 // Accumulates data and processes it using the cipher interface for consistency.
 func (e *StreamEncrypter) Write(p []byte) (n int, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if e.Error != nil {
-		return 0, e.Error
-	}
-
-	if len(p) == 0 {
-		return 0, nil
-	}
-
-	// Combine any leftover bytes from previous write with new data
-	data := append(e.buffer, p...)
-	e.buffer = nil // Clear buffer after combining
-
-	// Check if cipher block is available (might be nil if key was invalid)
-	if e.block == nil {
-		// Try to create cipher block if it wasn't created during initialization
-		if block, err := blowfish.NewCipher(e.cipher.Key); err == nil {
-			e.block = block
-		}
-	}
-
-	// Use the cipher interface to encrypt data (maintains compatibility with tests)
-	// This ensures proper padding and mode handling
-	encrypted, err := e.cipher.Encrypt(data, e.block)
-	if err != nil {
-		return 0, EncryptError{Err: err}
-	}
-
-	// Write encrypted data to the underlying writer
-	_, err = e.writer.Write(encrypted)
-	if err != nil {
-		return 0, err
-	}
-
-	// Return the number of input bytes processed (io.CopyBuffer convention)
-	return len(p), nil
+	return 0, nil
 }
+
+// Combine any leftover bytes from previous write with new data
+
+// Clear buffer after combining
+
+// Check if cipher block is available (might be nil if key was invalid)
+
+// Try to create cipher block if it wasn't created during initialization
+
+// Use the cipher interface to encrypt data (maintains compatibility with tests)
+// This ensures proper padding and mode handling
+
+// Write encrypted data to the underlying writer
+
+// Return the number of input bytes processed (io.CopyBuffer convention)
 
 // Close implements the io.Closer interface for the Blowfish stream encrypter.
 // Closes the underlying writer if it implements io.Closer.
 // Note: All data is processed in Write method for compatibility with cipher interface.
 func (e *StreamEncrypter) Close() error {
+	_ = "STUB: not implemented"
 	// Check for existing errors
-	if e.Error != nil {
-		return e.Error
-	}
-
-	// Close the underlying writer if it implements io.Closer
-	if closer, ok := e.writer.(io.Closer); ok {
-		return closer.Close()
-	}
 	return nil
 }
+
+// Close the underlying writer if it implements io.Closer
 
 // StreamDecrypter represents a streaming Blowfish decrypter that implements io.Reader.
 // It provides efficient decryption for large data streams by processing data
@@ -236,78 +146,36 @@ type StreamDecrypter struct {
 // and validates the key length and cipher mode for proper Blowfish decryption.
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
 func NewStreamDecrypter(r io.Reader, c *cipher.BlowfishCipher) io.Reader {
-	d := &StreamDecrypter{
-		reader:   r,
-		cipher:   *c,
-		buffer:   nil, // Will be populated on first read
-		position: 0,
-	}
-
-	if len(c.Key) < 4 || len(c.Key) > 56 {
-		d.Error = KeySizeError(len(c.Key))
-		return d
-	}
-
-	// Check for unsupported block mode
-	if c.Block == cipher.GCM {
-		d.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return d
-	}
-
-	d.block, d.Error = blowfish.NewCipher(c.Key)
-	return d
+	_ = "STUB: not implemented"
+	return *new(io.Reader)
 }
+
+// Will be populated on first read
+
+// Check for unsupported block mode
 
 // Read implements the io.Reader interface for streaming Blowfish decryption.
 // On the first call, reads all encrypted data from the underlying reader and decrypts it.
 // Subsequent calls return chunks of the decrypted data to maintain streaming interface.
 func (d *StreamDecrypter) Read(p []byte) (n int, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if d.Error != nil {
-		return 0, d.Error
-	}
-
-	// If we haven't decrypted the data yet, do it now
-	if d.buffer == nil {
-		// Read all encrypted data from the underlying reader
-		encryptedData, err := io.ReadAll(d.reader)
-		if err != nil {
-			return 0, ReadError{Err: err}
-		}
-
-		// If no data to decrypt, return EOF
-		if len(encryptedData) == 0 {
-			return 0, io.EOF
-		}
-
-		// Check if cipher block is available
-		if d.block == nil {
-			// Try to create cipher block if it wasn't created during initialization
-			if block, err := blowfish.NewCipher(d.cipher.Key); err == nil {
-				d.block = block
-			}
-		}
-
-		// Decrypt all the data at once using the cipher interface
-		// This ensures proper handling of padding and cipher modes
-		decrypted, err := d.cipher.Decrypt(encryptedData, d.block)
-		if err != nil {
-			return 0, DecryptError{Err: err}
-		}
-
-		d.buffer = decrypted
-		d.position = 0
-	}
-
-	// If we've already returned all decrypted data, return EOF
-	if d.position >= len(d.buffer) {
-		return 0, io.EOF
-	}
-
-	// Copy as much decrypted data as possible to the provided buffer
-	remainingData := d.buffer[d.position:]
-	copied := copy(p, remainingData)
-	d.position += copied
-
-	return copied, nil
+	return 0, nil
 }
+
+// If we haven't decrypted the data yet, do it now
+
+// Read all encrypted data from the underlying reader
+
+// If no data to decrypt, return EOF
+
+// Check if cipher block is available
+
+// Try to create cipher block if it wasn't created during initialization
+
+// Decrypt all the data at once using the cipher interface
+// This ensures proper handling of padding and cipher modes
+
+// If we've already returned all decrypted data, return EOF
+
+// Copy as much decrypted data as possible to the provided buffer

@@ -6,6 +6,4 @@ type Rc4Cipher struct {
 }
 
 // NewRc4Cipher returns a new Rc4Cipher instance.
-func NewRc4Cipher() (c *Rc4Cipher) {
-	return &Rc4Cipher{}
-}
+func NewRc4Cipher() (c *Rc4Cipher) { _ = "STUB: not implemented"; return nil }

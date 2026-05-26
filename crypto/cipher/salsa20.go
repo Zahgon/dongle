@@ -8,12 +8,8 @@ type Salsa20Cipher struct {
 }
 
 // NewSalsa20Cipher creates a new Salsa20Cipher instance.
-func NewSalsa20Cipher() *Salsa20Cipher {
-	return &Salsa20Cipher{}
-}
+func NewSalsa20Cipher() *Salsa20Cipher { _ = "STUB: not implemented"; return nil }
 
 // SetNonce sets the nonce for the cipher.
 // The nonce must be exactly 8 bytes for Salsa20.
-func (c *Salsa20Cipher) SetNonce(nonce []byte) {
-	c.Nonce = nonce
-}
+func (c *Salsa20Cipher) SetNonce(nonce []byte) { _ = "STUB: not implemented"; return }

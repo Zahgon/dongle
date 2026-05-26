@@ -1,11 +1,8 @@
 package coding
 
 import (
-	"bytes"
 	"io"
 	"io/fs"
-
-	"github.com/dromara/dongle/internal/utils"
 )
 
 // Decoder defines a Decoder struct.
@@ -18,56 +15,39 @@ type Decoder struct {
 
 // NewDecoder returns a new Decoder instance.
 func NewDecoder() Decoder {
-	return Decoder{}
+	_ = "STUB: not implemented"
+
+	// FromString decodes from string.
+	return *new(Decoder)
 }
 
-// FromString decodes from string.
-func (d Decoder) FromString(s string) Decoder {
-	d.src = utils.String2Bytes(s)
-	return d
-}
+func (d Decoder) FromString(s string) Decoder { _ = "STUB: not implemented"; return *new(Decoder) }
 
 // FromBytes decodes from byte slice.
 func (d Decoder) FromBytes(b []byte) Decoder {
-	d.src = b
-	return d
+	_ = "STUB: not implemented"
+	return *
+
+	// FromFile decodes from file.
+	new(Decoder)
 }
 
-// FromFile decodes from file.
 func (d Decoder) FromFile(f fs.File) Decoder {
-	d.reader = f
-	return d
+	_ = "STUB: not implemented"
+	return *
+
+	// ToString outputs as string.
+	new(Decoder)
 }
 
-// ToString outputs as string.
-func (d Decoder) ToString() string {
-	if len(d.dst) == 0 || d.Error != nil {
-		return ""
-	}
-	return utils.Bytes2String(d.dst)
-}
+func (d Decoder) ToString() string { _ = "STUB: not implemented"; return "" }
 
 // ToBytes outputs as byte slice.
-func (d Decoder) ToBytes() []byte {
-	if len(d.dst) == 0 || d.Error != nil {
-		return []byte{}
-	}
-	return d.dst
-}
+func (d Decoder) ToBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 func (d Decoder) stream(fn func(io.Reader) io.Reader) ([]byte, error) {
-	var buf bytes.Buffer
-	decoder := fn(d.reader)
-
-	// Try to reset the reader position if it's a seeker
-	if seeker, ok := d.reader.(io.Seeker); ok {
-		seeker.Seek(0, io.SeekStart)
-	}
-	if _, err := io.CopyBuffer(&buf, decoder, make([]byte, BufferSize)); err != nil && err != io.EOF {
-		return []byte{}, err
-	}
-	if buf.Len() == 0 {
-		return []byte{}, nil
-	}
-	return buf.Bytes(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Try to reset the reader position if it's a seeker

@@ -1,69 +1,49 @@
 package keypair
 
-import "fmt"
-
 type EmptyPublicKeyError struct {
 }
 
-func (e EmptyPublicKeyError) Error() string {
-	return "public key cannot be empty"
-}
+func (e EmptyPublicKeyError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type InvalidPublicKeyError struct {
 	Err error
 }
 
-func (e InvalidPublicKeyError) Error() string {
-	return fmt.Sprintf("invalid public key: %v", e.Err)
-}
+func (e InvalidPublicKeyError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type EmptyPrivateKeyError struct {
 }
 
-func (e EmptyPrivateKeyError) Error() string {
-	return "private key cannot be empty"
-}
+func (e EmptyPrivateKeyError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type InvalidPrivateKeyError struct {
 	Err error
 }
 
-func (e InvalidPrivateKeyError) Error() string {
-	return fmt.Sprintf(" invalid private key: %v", e.Err)
-}
+func (e InvalidPrivateKeyError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type EmptyFormatError struct {
 }
 
-func (e EmptyFormatError) Error() string {
-	return "key format cannot be empty, please call SetFormat() to set key format (PKCS1/PKCS8)"
-}
+func (e EmptyFormatError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type UnsupportedKeyFormatError struct {
 }
 
-func (e UnsupportedKeyFormatError) Error() string {
-	return "unsupported key format, only PKCS1 and PKCS8 are supported"
-}
+func (e UnsupportedKeyFormatError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type EmptyPaddingError struct {
 }
 
-func (e EmptyPaddingError) Error() string {
-	return "padding scheme cannot be empty, please call SetPadding() to set padding scheme (PKCS1v15/OAEP/PSS)"
-}
+func (e EmptyPaddingError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type UnsupportedPaddingSchemeError struct {
 	Padding string
 }
 
-func (e UnsupportedPaddingSchemeError) Error() string {
-	return fmt.Sprintf("unsupported padding scheme: %s, only PKCS1v15, OAEP, and PSS are supported", e.Padding)
-}
+func (e UnsupportedPaddingSchemeError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type EmptySignatureError struct {
 }
 
-func (e EmptySignatureError) Error() string {
-	return "no signature provided for verification"
-}
+func (e EmptySignatureError) Error() string { _ = "STUB: not implemented"; return "" }

@@ -1,10 +1,5 @@
 package utils
 
-import (
-	"encoding/binary"
-	"unsafe"
-)
-
 // String2Bytes converts string to byte slice without memory allocation (zero-copy).
 //
 // WARNING: The returned []byte must be treated as read-only.
@@ -13,17 +8,7 @@ import (
 // It is not guaranteed to be safe across all Go versions.
 // Use only when you are sure the []byte will not be modified.
 // For safety, prefer []byte(s) if you need a writable copy.
-func String2Bytes(s string) []byte {
-	if len(s) == 0 {
-		return []byte{}
-	}
-	return *(*[]byte)(unsafe.Pointer(
-		&struct {
-			string
-			Cap int
-		}{s, len(s)},
-	))
-}
+func String2Bytes(s string) []byte { _ = "STUB: not implemented"; return nil }
 
 // Bytes2String converts a byte slice to string without memory allocation (zero-copy).
 //
@@ -31,16 +16,7 @@ func String2Bytes(s string) []byte {
 // This method uses unsafe tricks and relies on Go's current runtime implementation.
 // It is not guaranteed to be safe across all Go versions.
 // For safety, prefer string(b) if you need a copy.
-func Bytes2String(b []byte) string {
-	if len(b) == 0 {
-		return ""
-	}
-	return *(*string)(unsafe.Pointer(&b))
-}
+func Bytes2String(b []byte) string { _ = "STUB: not implemented"; return "" }
 
 // Int2Bytes converts int to byte slice encoded as a 4-byte big-endian slice.
-func Int2Bytes(i int) []byte {
-	var buf [4]byte
-	binary.BigEndian.PutUint32(buf[:], uint32(i))
-	return buf[:]
-}
+func Int2Bytes(i int) []byte { _ = "STUB: not implemented"; return nil }

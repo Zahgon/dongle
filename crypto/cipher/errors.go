@@ -1,7 +1,5 @@
 package cipher
 
-import "fmt"
-
 // EmptySrcError represents an error when the source data is empty.
 type EmptySrcError struct {
 	mode BlockMode
@@ -9,9 +7,7 @@ type EmptySrcError struct {
 
 // Error returns a formatted error message indicating that the source cannot be empty
 // for the specified cipher mode.
-func (e EmptySrcError) Error() string {
-	return fmt.Sprintf("src cannot be empty in '%s' block mode", e.mode)
-}
+func (e EmptySrcError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // EmptyIVError represents an error when the initialization vector (IV) is empty
 // for cipher modes that require an IV. This error occurs when the IV is nil
@@ -22,9 +18,7 @@ type EmptyIVError struct {
 
 // Error returns a formatted error message indicating that the IV cannot be empty
 // for the specified cipher mode.
-func (e EmptyIVError) Error() string {
-	return fmt.Sprintf("iv cannot be empty in '%s' block mode", e.mode)
-}
+func (e EmptyIVError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // EmptyNonceError represents an error when the nonce (number used once) is empty
 // for cipher modes that require a nonce, such as GCM mode. This error occurs
@@ -36,9 +30,7 @@ type EmptyNonceError struct {
 
 // Error returns a formatted error message indicating that the nonce cannot be empty
 // for the specified cipher mode.
-func (e EmptyNonceError) Error() string {
-	return fmt.Sprintf("nonce cannot be empty in '%s' block mode", e.mode)
-}
+func (e EmptyNonceError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // InvalidPlaintextError represents an error when the plaintext length is invalid
 // for the specified block cipher mode. This error occurs when the plaintext
@@ -52,9 +44,7 @@ type InvalidPlaintextError struct {
 
 // Error returns a formatted error message describing the invalid plaintext length.
 // The message includes the cipher mode, actual plaintext length, and required block size.
-func (e InvalidPlaintextError) Error() string {
-	return fmt.Sprintf("plaintext length %d must be a multiple of block size %d in '%s' block mode", len(e.src), e.size, e.mode)
-}
+func (e InvalidPlaintextError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // InvalidCiphertextError represents an error when the ciphertext length is invalid
 // for the specified block cipher mode. This error occurs when the ciphertext
@@ -68,9 +58,7 @@ type InvalidCiphertextError struct {
 
 // Error returns a formatted error message describing the invalid ciphertext length.
 // The message includes the ciphertext length, required block size, and cipher mode.
-func (e InvalidCiphertextError) Error() string {
-	return fmt.Sprintf("raw ciphertext by decoding length %d must be a multiple of block size %d in '%s' block mode", len(e.src), e.size, e.mode)
-}
+func (e InvalidCiphertextError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // InvalidIVError represents an error when the initialization vector (IV) length
 // is invalid for the specified block cipher. This error occurs when the IV
@@ -83,9 +71,7 @@ type InvalidIVError struct {
 
 // Error returns a formatted error message describing the invalid IV length.
 // The message includes the cipher mode, actual IV length, and required block size.
-func (e InvalidIVError) Error() string {
-	return fmt.Sprintf("iv length %d must equal block size %d in '%s' block mode", len(e.iv), e.size, e.mode)
-}
+func (e InvalidIVError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // CreateCipherError represents an error that occurs during cipher creation.
 // This error wraps the underlying error that prevented the cipher from
@@ -98,9 +84,7 @@ type CreateCipherError struct {
 
 // Error returns a formatted error message describing the cipher creation failure.
 // The message includes the cipher mode and the underlying error details.
-func (e CreateCipherError) Error() string {
-	return fmt.Sprintf("failed to create cipher in '%s' block mode: %v", e.mode, e.err)
-}
+func (e CreateCipherError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // UnsupportedBlockModeError represents an error when an unsupported block mode is used.
 type UnsupportedBlockModeError struct {
@@ -109,9 +93,7 @@ type UnsupportedBlockModeError struct {
 
 // Error returns a formatted error message describing the unsupported mode.
 // The message includes the mode name and explains why it's not supported.
-func (e UnsupportedBlockModeError) Error() string {
-	return fmt.Sprintf("unsupported block mode '%s'", e.mode)
-}
+func (e UnsupportedBlockModeError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // UnsupportedPaddingModeError represents an error when an unsupported padding mode is used.
 type UnsupportedPaddingModeError struct {
@@ -120,6 +102,4 @@ type UnsupportedPaddingModeError struct {
 
 // Error returns a formatted error message describing the unsupported padding mode.
 // The message includes the mode name and explains why it's not supported.
-func (e UnsupportedPaddingModeError) Error() string {
-	return fmt.Sprintf("unsupported padding mode '%s'", e.mode)
-}
+func (e UnsupportedPaddingModeError) Error() string { _ = "STUB: not implemented"; return "" }

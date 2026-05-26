@@ -34,30 +34,14 @@ type StdEncoder struct {
 // NewStdEncoder creates a new base64 encoder with the specified alphabet.
 // The alphabet must be a valid base64 alphabet string (exactly 64 characters).
 // Common choices are StdAlphabet for standard encoding or URLAlphabet for URL-safe encoding.
-func NewStdEncoder(alphabet string) *StdEncoder {
-	if len(alphabet) != 64 {
-		return &StdEncoder{Error: AlphabetSizeError(len(alphabet))}
-	}
-	return &StdEncoder{encoding: base64.NewEncoding(alphabet), alphabet: alphabet}
-}
+func NewStdEncoder(alphabet string) *StdEncoder { _ = "STUB: not implemented"; return nil }
 
 // Encode encodes the given byte slice using base64 encoding.
 // The encoded result uses the alphabet specified when creating the encoder.
 // The encoding process handles padding automatically according to RFC 4648.
-func (e *StdEncoder) Encode(src []byte) (dst []byte) {
-	if e.Error != nil {
-		return
-	}
-	if len(src) == 0 {
-		return
-	}
+func (e *StdEncoder) Encode(src []byte) (dst []byte) { _ = "STUB: not implemented"; return nil }
 
-	// Pre-allocate buffer with exact size to avoid reallocation
-	encodedLen := e.encoding.EncodedLen(len(src))
-	dst = make([]byte, encodedLen)
-	e.encoding.Encode(dst, src)
-	return
-}
+// Pre-allocate buffer with exact size to avoid reallocation
 
 // StdDecoder represents a base64 decoder for standard decoding operations.
 // It wraps the standard library's base64.Encoding to provide a consistent
@@ -71,46 +55,25 @@ type StdDecoder struct {
 // NewStdDecoder creates a new base64 decoder with the specified alphabet.
 // The alphabet must be a valid base64 alphabet string (exactly 64 characters).
 // Common choices are StdAlphabet for standard decoding or URLAlphabet for URL-safe decoding.
-func NewStdDecoder(alphabet string) *StdDecoder {
-	if len(alphabet) != 64 {
-		return &StdDecoder{Error: AlphabetSizeError(len(alphabet))}
-	}
-	return &StdDecoder{encoding: base64.NewEncoding(alphabet), alphabet: alphabet}
-}
+func NewStdDecoder(alphabet string) *StdDecoder { _ = "STUB: not implemented"; return nil }
 
 // Decode decodes the given base64-encoded byte slice.
 // The decoded result is truncated to the actual decoded length.
 // Handles padding characters (=) automatically according to RFC 4648.
 func (d *StdDecoder) Decode(src []byte) (dst []byte, err error) {
-	if d.Error != nil {
-		err = d.Error
-		return
-	}
-	if len(src) == 0 {
-		return
-	}
-
-	// Pre-allocate buffer with estimated size to avoid reallocation
-	decodedLen := d.encoding.DecodedLen(len(src))
-	buf := make([]byte, decodedLen)
-
-	n, err := d.encoding.Decode(buf, src)
-	if err != nil {
-		// Convert standard library error to custom error with position information
-		// Try to determine the position of the error
-		pos := int64(0)
-		if len(src) > 0 {
-			// For base64 errors, the position is usually at the beginning,
-			// but we can't easily determine the exact position from std library
-			pos = 0
-		}
-		d.Error = CorruptInputError(pos)
-		return nil, d.Error
-	}
-
-	// Return slice with exact decoded length
-	return buf[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Pre-allocate buffer with estimated size to avoid reallocation
+
+// Convert standard library error to custom error with position information
+// Try to determine the position of the error
+
+// For base64 errors, the position is usually at the beginning,
+// but we can't easily determine the exact position from std library
+
+// Return slice with exact decoded length
 
 // StreamEncoder represents a streaming base64 encoder that implements io.WriteCloser.
 // It provides efficient encoding for large data streams by processing data
@@ -128,79 +91,39 @@ type StreamEncoder struct {
 // to the provided io.Writer. The encoder uses the specified alphabet for encoding.
 // The encoder automatically handles padding when Close() is called.
 func NewStreamEncoder(w io.Writer, alphabet string) io.WriteCloser {
-	if len(alphabet) != 64 {
-		return &StreamEncoder{Error: AlphabetSizeError(len(alphabet))}
-	}
-	return &StreamEncoder{
-		writer:   w,
-		encoder:  base64.NewEncoding(alphabet),
-		alphabet: alphabet,
-	}
+	_ = "STUB: not implemented"
+	return *new(io.WriteCloser)
 }
 
 // Write implements the io.Writer interface for streaming base64 encoding.
 // Processes data in chunks while maintaining minimal state for cross-Write calls.
 // This is true streaming - processes data immediately without accumulating large buffers.
 func (e *StreamEncoder) Write(p []byte) (n int, err error) {
-	if e.Error != nil {
-		return 0, e.Error
-	}
-
-	if len(p) == 0 {
-		return 0, nil
-	}
-
-	// Combine any leftover bytes from previous write with new data
-	// This is necessary for true streaming across multiple Write calls
-	data := append(e.buffer, p...)
-	e.buffer = nil // Clear buffer after combining
-
-	// Process data in chunks of 3 bytes (optimal for base64 encoding)
-	// Base64 encoding converts 3 bytes to 4 characters
-	chunkSize := 3
-	chunks := len(data) / chunkSize
-
-	for i := 0; i < chunks*chunkSize; i += chunkSize {
-		chunk := data[i : i+chunkSize]
-		// Use reusable buffer for encoding to avoid allocations
-		e.encoder.Encode(e.encodeBuf[:], chunk)
-		if _, err = e.writer.Write(e.encodeBuf[:]); err != nil {
-			return len(p), err
-		}
-	}
-
-	// Buffer remaining 0-2 bytes for next write or close
-	remainder := len(data) % chunkSize
-	if remainder > 0 {
-		e.buffer = data[len(data)-remainder:]
-	}
-
-	return len(p), nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
+// Combine any leftover bytes from previous write with new data
+// This is necessary for true streaming across multiple Write calls
+
+// Clear buffer after combining
+
+// Process data in chunks of 3 bytes (optimal for base64 encoding)
+// Base64 encoding converts 3 bytes to 4 characters
+
+// Use reusable buffer for encoding to avoid allocations
+
+// Buffer remaining 0-2 bytes for next write or close
 
 // Close implements the io.Closer interface for streaming base64 encoding.
 // Encodes any remaining buffered bytes from the last Write call.
 // This is the only place where we handle cross-Write state.
-func (e *StreamEncoder) Close() error {
-	if e.Error != nil {
-		return e.Error
-	}
+func (e *StreamEncoder) Close() error { _ = "STUB: not implemented"; return nil }
 
-	// Encode any remaining bytes (1-2 bytes) from the last Write
-	if len(e.buffer) > 0 {
-		// For final encoding with padding, we need to use a temporary buffer
-		// since the output might be less than 4 bytes for incomplete blocks
-		encodedLen := e.encoder.EncodedLen(len(e.buffer))
-		encoded := make([]byte, encodedLen)
-		e.encoder.Encode(encoded, e.buffer)
-		if _, err := e.writer.Write(encoded); err != nil {
-			return err
-		}
-		e.buffer = nil
-	}
+// Encode any remaining bytes (1-2 bytes) from the last Write
 
-	return nil
-}
+// For final encoding with padding, we need to use a temporary buffer
+// since the output might be less than 4 bytes for incomplete blocks
 
 // StreamDecoder represents a streaming base64 decoder that implements io.Reader.
 // It provides efficient decoding for large data streams by processing data
@@ -219,88 +142,42 @@ type StreamDecoder struct {
 // from the provided io.Reader. The decoder uses the specified alphabet for decoding.
 // The decoder automatically handles padding and invalid characters.
 func NewStreamDecoder(r io.Reader, alphabet string) io.Reader {
-	if len(alphabet) != 64 {
-		return &StreamDecoder{Error: AlphabetSizeError(len(alphabet))}
-	}
-	return &StreamDecoder{
-		reader:   r,
-		decoder:  base64.NewEncoding(alphabet),
-		alphabet: alphabet,
-	}
+	_ = "STUB: not implemented"
+	return *new(io.Reader)
 }
 
 // Read implements the io.Reader interface for streaming base64 decoding.
 // Reads and decodes base64 data from the underlying reader in chunks.
 // Maintains an internal buffer to handle partial reads efficiently.
-func (d *StreamDecoder) Read(p []byte) (n int, err error) {
-	if d.Error != nil {
-		return 0, d.Error
-	}
+func (d *StreamDecoder) Read(p []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
-	// Return buffered data if available
-	if d.pos < len(d.buffer) {
-		n = copy(p, d.buffer[d.pos:])
-		d.pos += n
-		return n, nil
-	}
+// Return buffered data if available
 
-	// Read encoded data in chunks using reusable buffer
-	rn, err := d.reader.Read(d.readBuf[:])
-	if err != nil && err != io.EOF {
-		return 0, err
-	}
+// Read encoded data in chunks using reusable buffer
 
-	if rn == 0 {
-		return 0, io.EOF
-	}
+// Decode the data directly using the configured decoder
+// Estimate decoded size for pre-allocation
 
-	// Decode the data directly using the configured decoder
-	// Estimate decoded size for pre-allocation
-	decodedLen := d.decoder.DecodedLen(rn)
-	decoded := make([]byte, decodedLen)
-	dn, err := d.decoder.Decode(decoded, d.readBuf[:rn])
-	if err != nil {
-		return 0, err
-	}
-	decoded = decoded[:dn]
+// Copy decoded data to the provided buffer
 
-	// Copy decoded data to the provided buffer
-	copied := copy(p, decoded)
-	if copied < len(decoded) {
-		// Buffer remaining data for next read
-		d.buffer = decoded[copied:]
-		d.pos = 0
-	}
-
-	return copied, nil
-}
+// Buffer remaining data for next read
 
 // Convenience functions for common use cases
 
 // Encode encodes the given byte slice using standard base64 encoding.
 // This is a convenience function that creates a new encoder and encodes the input.
-func Encode(src []byte) []byte {
-	return NewStdEncoder(StdAlphabet).Encode(src)
-}
+func Encode(src []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // EncodeURLSafe encodes the given byte slice using URL-safe base64 encoding.
 // This is a convenience function that creates a new encoder and encodes the input.
-func EncodeURLSafe(src []byte) []byte {
-	return NewStdEncoder(URLAlphabet).Encode(src)
-}
+func EncodeURLSafe(src []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // Decode decodes the given base64-encoded byte slice using standard base64 decoding.
 // This is a convenience function that creates a new decoder and decodes the input.
 // Returns the decoded data, ignoring any decoding errors.
-func Decode(src []byte) []byte {
-	dst, _ := NewStdDecoder(StdAlphabet).Decode(src)
-	return dst
-}
+func Decode(src []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // DecodeURLSafe decodes the given URL-safe base64-encoded byte slice.
 // This is a convenience function that creates a new decoder and decodes the input.
 // Returns the decoded data, ignoring any decoding errors.
-func DecodeURLSafe(src []byte) []byte {
-	dst, _ := NewStdDecoder(URLAlphabet).Decode(src)
-	return dst
-}
+func DecodeURLSafe(src []byte) []byte { _ = "STUB: not implemented"; return nil }

@@ -3,7 +3,6 @@ package sm2
 import (
 	"io"
 
-	"github.com/dromara/dongle/crypto/internal/sm2"
 	"github.com/dromara/dongle/crypto/keypair"
 )
 
@@ -16,36 +15,12 @@ type StdEncrypter struct {
 }
 
 // NewStdEncrypter creates a new SM2 encrypter bound to the given key pair.
-func NewStdEncrypter(kp *keypair.Sm2KeyPair) *StdEncrypter {
-	e := &StdEncrypter{keypair: *kp}
-	if len(kp.PublicKey) == 0 {
-		e.Error = EncryptError{Err: keypair.EmptyPublicKeyError{}}
-		return e
-	}
-	pubKey, err := kp.ParsePublicKey()
-	if err != nil {
-		e.Error = EncryptError{Err: err}
-		return e
-	}
-	e.cache.pubKey = pubKey
-	return e
-}
+func NewStdEncrypter(kp *keypair.Sm2KeyPair) *StdEncrypter { _ = "STUB: not implemented"; return nil }
 
 // Encrypt encrypts data with SM2 public key.
 func (e *StdEncrypter) Encrypt(src []byte) (dst []byte, err error) {
-	if e.Error != nil {
-		err = e.Error
-		return
-	}
-	if len(src) == 0 {
-		return
-	}
-	dst, err = sm2.EncryptWithPublicKey(e.cache.pubKey, src, e.keypair.Window, string(e.keypair.Mode))
-	if err != nil {
-		err = EncryptError{Err: err}
-		return
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // StreamEncrypter buffers plaintext and writes SM2 ciphertext on Close.
@@ -60,75 +35,22 @@ type StreamEncrypter struct {
 // NewStreamEncrypter returns a WriteCloser that encrypts all written data
 // with the provided key pair and writes the ciphertext on Close.
 func NewStreamEncrypter(w io.Writer, kp *keypair.Sm2KeyPair) io.WriteCloser {
-	e := &StreamEncrypter{
-		writer:  w,
-		keypair: *kp,
-		buffer:  make([]byte, 0),
-	}
-	if len(kp.PublicKey) == 0 {
-		e.Error = EncryptError{Err: keypair.EmptyPublicKeyError{}}
-		return e
-	}
-	pubKey, err := kp.ParsePublicKey()
-	if err != nil {
-		e.Error = EncryptError{Err: err}
-		return e
-	}
-	e.cache.pubKey = pubKey
-	return e
+	_ = "STUB: not implemented"
+	return *new(io.WriteCloser)
 }
 
 // encrypt encrypts plaintext with SM2 public key.
 func (e *StreamEncrypter) encrypt(src []byte) (dst []byte, err error) {
-	if e.Error != nil {
-		err = e.Error
-		return
-	}
-	if len(src) == 0 {
-		return
-	}
-	dst, err = sm2.EncryptWithPublicKey(e.cache.pubKey, src, e.keypair.Window, string(e.keypair.Mode))
-	if err != nil {
-		err = EncryptError{Err: err}
-		return
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Write buffers plaintext to be encrypted.
 func (e *StreamEncrypter) Write(p []byte) (n int, err error) {
-	if e.Error != nil {
-		err = e.Error
-		return
-	}
-	if len(p) == 0 {
-		return
-	}
-	e.buffer = append(e.buffer, p...)
-	return len(p), nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Close encrypts the buffered plaintext and writes the ciphertext to the
 // underlying writer. If the writer implements io.Closer, it is closed.
-func (e *StreamEncrypter) Close() error {
-	if e.Error != nil {
-		return e.Error
-	}
-	if len(e.buffer) == 0 {
-		if closer, ok := e.writer.(io.Closer); ok {
-			return closer.Close()
-		}
-		return nil
-	}
-	dst, encErr := e.encrypt(e.buffer)
-	if encErr != nil {
-		return encErr
-	}
-	if _, writeErr := e.writer.Write(dst); writeErr != nil {
-		return writeErr
-	}
-	if closer, ok := e.writer.(io.Closer); ok {
-		return closer.Close()
-	}
-	return nil
-}
+func (e *StreamEncrypter) Close() error { _ = "STUB: not implemented"; return nil }

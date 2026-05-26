@@ -1,51 +1,15 @@
 package coding
 
-import (
-	"io"
-
-	"github.com/dromara/dongle/coding/base58"
-)
-
 // ByBase58 Encoders by base58.
-func (e Encoder) ByBase58() Encoder {
-	if e.Error != nil {
-		return e
-	}
+func (e Encoder) ByBase58() Encoder { _ = "STUB: not implemented"; return *new(Encoder) }
 
-	// Streaming encoding mode
-	if e.reader != nil {
-		e.dst, e.Error = e.stream(func(w io.Writer) io.WriteCloser {
-			return base58.NewStreamEncoder(w)
-		})
-		return e
-	}
+// Streaming encoding mode
 
-	// Standard encoding mode
-	if len(e.src) > 0 {
-		e.dst = base58.NewStdEncoder().Encode(e.src)
-	}
-
-	return e
-}
+// Standard encoding mode
 
 // ByBase58 decodes by base58.
-func (d Decoder) ByBase58() Decoder {
-	if d.Error != nil {
-		return d
-	}
+func (d Decoder) ByBase58() Decoder { _ = "STUB: not implemented"; return *new(Decoder) }
 
-	// Streaming decoding mode
-	if d.reader != nil {
-		d.dst, d.Error = d.stream(func(r io.Reader) io.Reader {
-			return base58.NewStreamDecoder(r)
-		})
-		return d
-	}
+// Streaming decoding mode
 
-	// Standard decoding mode
-	if len(d.src) > 0 {
-		d.dst, d.Error = base58.NewStdDecoder().Decode(d.src)
-	}
-
-	return d
-}
+// Standard decoding mode

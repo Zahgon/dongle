@@ -6,9 +6,4 @@ type AesCipher struct {
 }
 
 // NewAesCipher returns a new AesCipher instance.
-func NewAesCipher(block BlockMode) *AesCipher {
-	c := &AesCipher{}
-	c.Block = block
-	c.Padding = No
-	return c
-}
+func NewAesCipher(block BlockMode) *AesCipher { _ = "STUB: not implemented"; return nil }

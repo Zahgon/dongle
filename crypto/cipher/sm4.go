@@ -6,9 +6,4 @@ type Sm4Cipher struct {
 }
 
 // NewSm4Cipher returns a new Sm4Cipher instance.
-func NewSm4Cipher(block BlockMode) *Sm4Cipher {
-	c := &Sm4Cipher{}
-	c.Block = block
-	c.Padding = No
-	return c
-}
+func NewSm4Cipher(block BlockMode) *Sm4Cipher { _ = "STUB: not implemented"; return nil }

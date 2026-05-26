@@ -31,78 +31,32 @@ type StdEncoder struct {
 
 // NewStdEncoder creates a new base58 encoder using the standard alphabet.
 // Initializes the encoding lookup table for efficient character mapping.
-func NewStdEncoder() *StdEncoder {
-	e := &StdEncoder{alphabet: StdAlphabet}
-	copy(e.encodeMap[:], StdAlphabet)
-	return e
-}
+func NewStdEncoder() *StdEncoder { _ = "STUB: not implemented"; return nil }
 
 // Encode encodes the given byte slice using base58 encoding.
 // Handles leading zeros specially by encoding them as leading '1' characters.
 // The encoding process uses big.Int arithmetic for large number handling.
-func (e *StdEncoder) Encode(src []byte) (dst []byte) {
-	if e.Error != nil {
-		return
-	}
-	if len(src) == 0 {
-		return
-	}
+func (e *StdEncoder) Encode(src []byte) (dst []byte) { _ = "STUB: not implemented"; return nil }
 
-	// Count leading zeros
-	leadingZeros := 0
-	for _, b := range src {
-		if b == 0 {
-			leadingZeros++
-		} else {
-			break
-		}
-	}
+// Count leading zeros
 
-	// If all bytes are zero, return appropriate number of '1's
-	if leadingZeros == len(src) {
-		result := make([]byte, leadingZeros)
-		for i := range result {
-			result[i] = '1'
-		}
-		return result
-	}
+// If all bytes are zero, return appropriate number of '1's
 
-	// Convert to big.Int, skipping leading zeros
-	intBytes := big.NewInt(0).SetBytes(src[leadingZeros:])
+// Convert to big.Int, skipping leading zeros
 
-	// Pre-allocate dst slice with estimated capacity to avoid reallocations
-	// Base58 encoding typically produces ~1.37x the input size
-	estimatedSize := (len(src)-leadingZeros)*137/100 + leadingZeros
-	dst = make([]byte, 0, estimatedSize)
+// Pre-allocate dst slice with estimated capacity to avoid reallocations
+// Base58 encoding typically produces ~1.37x the input size
 
-	// Encode the non-zero part
-	for intBytes.Cmp(bigInt0) > 0 {
-		var remainder big.Int
-		intBytes.DivMod(intBytes, bigInt58, &remainder)
-		dst = append(dst, e.encodeMap[remainder.Int64()])
-	}
+// Encode the non-zero part
 
-	// Reverse the encoded part
-	reverseBytes(dst)
+// Reverse the encoded part
 
-	// Add leading '1's for each leading zero byte
-	result := make([]byte, leadingZeros+len(dst))
-	for i := 0; i < leadingZeros; i++ {
-		result[i] = '1'
-	}
-	copy(result[leadingZeros:], dst)
-
-	return result
-}
+// Add leading '1's for each leading zero byte
 
 // reverseBytes reverses a byte slice in place.
 // This is used to correct the order of encoded characters after base58 encoding,
 // as the encoding process produces characters in reverse order.
-func reverseBytes(b []byte) {
-	for i := 0; i < len(b)/2; i++ {
-		b[i], b[len(b)-1-i] = b[len(b)-1-i], b[i]
-	}
-}
+func reverseBytes(b []byte) { _ = "STUB: not implemented"; return }
 
 // StdDecoder represents a base58 decoder for standard decoding operations.
 // It implements base58 decoding following Bitcoin-style specifications,
@@ -118,69 +72,32 @@ type StdDecoder struct {
 // Initializes the decoding lookup table for efficient character mapping.
 // Invalid characters are marked with 0xFF for error detection during decoding.
 // The lookup table provides O(1) character validation and value retrieval.
-func NewStdDecoder() *StdDecoder {
-	d := &StdDecoder{alphabet: StdAlphabet}
-	// Initialize all bytes to 0xFF (invalid)
-	for i := range 256 {
-		d.decodeMap[i] = 0xFF
-	}
-	// Set valid characters
-	for i := 0; i < len(StdAlphabet); i++ {
-		d.decodeMap[StdAlphabet[i]] = byte(i)
-	}
-	return d
-}
+func NewStdDecoder() *StdDecoder { _ = "STUB: not implemented"; return nil }
+
+// Initialize all bytes to 0xFF (invalid)
+
+// Set valid characters
 
 // Decode decodes the given base58-encoded byte slice back to binary data.
 // Handles leading '1' characters (which represent leading zeros in the original data)
 // and validates character validity using the lookup table.
 // Uses big.Int arithmetic for large number handling and proper overflow management.
 func (d *StdDecoder) Decode(src []byte) (dst []byte, err error) {
-	if d.Error != nil {
-		err = d.Error
-		return
-	}
-	if len(src) == 0 {
-		return
-	}
-
-	// Count leading '1's
-	leadingOnes := 0
-	for _, b := range src {
-		if b == '1' {
-			leadingOnes++
-		} else {
-			break
-		}
-	}
-
-	// If all characters are '1', return appropriate number of zero bytes
-	if leadingOnes == len(src) {
-		result := make([]byte, leadingOnes)
-		return result, nil
-	}
-
-	// Decode the non-'1' part
-	bigInt := big.NewInt(0)
-	for i, v := range src[leadingOnes:] {
-		index := int(d.decodeMap[v])
-		if index == 0xFF {
-			// Invalid character
-			return nil, CorruptInputError(i + leadingOnes)
-		}
-		bigInt.Mul(bigInt, bigInt58)
-		bigInt.Add(bigInt, big.NewInt(int64(index)))
-	}
-
-	// Convert to bytes
-	decodedBytes := bigInt.Bytes()
-
-	// Add leading zeros
-	result := make([]byte, leadingOnes+len(decodedBytes))
-	copy(result[leadingOnes:], decodedBytes)
-
-	return result, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Count leading '1's
+
+// If all characters are '1', return appropriate number of zero bytes
+
+// Decode the non-'1' part
+
+// Invalid character
+
+// Convert to bytes
+
+// Add leading zeros
 
 // StreamEncoder represents a streaming base58 encoder that implements io.WriteCloser.
 // It provides efficient encoding for large data streams by processing data
@@ -197,71 +114,34 @@ type StreamEncoder struct {
 // to the provided io.Writer. The encoder uses the standard base58 alphabet.
 // Returns an io.WriteCloser that buffers data and performs encoding on Close().
 func NewStreamEncoder(w io.Writer) io.WriteCloser {
-	return &StreamEncoder{
-		writer:   w,
-		alphabet: StdAlphabet,
-		encoder:  NewStdEncoder(),
-	}
+	_ = "STUB: not implemented"
+	return *new(io.WriteCloser)
 }
 
 // Write implements the io.Writer interface for streaming base58 encoding.
 // Processes data in chunks while maintaining minimal state for cross-Write calls.
 // This is true streaming - processes data immediately without accumulating large buffers.
 func (e *StreamEncoder) Write(p []byte) (n int, err error) {
-	if e.Error != nil {
-		return 0, e.Error
-	}
-
-	if len(p) == 0 {
-		return 0, nil
-	}
-
-	// Combine any leftover bytes from previous write with new data
-	// This is necessary for true streaming across multiple Write calls
-	data := append(e.buffer, p...)
-	e.buffer = nil // Clear buffer after combining
-
-	// Process data in chunks of 8 bytes (optimal for base58 encoding)
-	// Base58 encoding typically produces ~1.37x the input size
-	chunkSize := 8
-	chunks := len(data) / chunkSize
-
-	for i := 0; i < chunks*chunkSize; i += chunkSize {
-		chunk := data[i : i+chunkSize]
-		encoded := e.encoder.Encode(chunk)
-		if _, err = e.writer.Write(encoded); err != nil {
-			return len(p), err
-		}
-	}
-
-	// Buffer remaining 0-7 bytes for next write or close
-	remainder := len(data) % chunkSize
-	if remainder > 0 {
-		e.buffer = data[len(data)-remainder:]
-	}
-
-	return len(p), nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
+// Combine any leftover bytes from previous write with new data
+// This is necessary for true streaming across multiple Write calls
+
+// Clear buffer after combining
+
+// Process data in chunks of 8 bytes (optimal for base58 encoding)
+// Base58 encoding typically produces ~1.37x the input size
+
+// Buffer remaining 0-7 bytes for next write or close
 
 // Close implements the io.Closer interface for streaming base58 encoding.
 // Encodes any remaining buffered bytes from the last Write call.
 // This is the only place where we handle cross-Write state.
-func (e *StreamEncoder) Close() error {
-	if e.Error != nil {
-		return e.Error
-	}
+func (e *StreamEncoder) Close() error { _ = "STUB: not implemented"; return nil }
 
-	// Encode any remaining bytes (1-7 bytes) from the last Write
-	if len(e.buffer) > 0 {
-		encoded := e.encoder.Encode(e.buffer)
-		if _, err := e.writer.Write(encoded); err != nil {
-			return err
-		}
-		e.buffer = nil
-	}
-
-	return nil
-}
+// Encode any remaining bytes (1-7 bytes) from the last Write
 
 // StreamDecoder represents a streaming base58 decoder that implements io.Reader.
 // It provides efficient decoding for large data streams by processing data
@@ -279,66 +159,28 @@ type StreamDecoder struct {
 // NewStreamDecoder creates a new streaming base58 decoder that reads encoded data
 // from the provided io.Reader. The decoder uses the standard base58 alphabet.
 // Returns an io.Reader that provides decoded data in chunks for efficient processing.
-func NewStreamDecoder(r io.Reader) io.Reader {
-	return &StreamDecoder{
-		reader:   r,
-		alphabet: StdAlphabet,
-		decoder:  NewStdDecoder(),
-	}
-}
+func NewStreamDecoder(r io.Reader) io.Reader { _ = "STUB: not implemented"; return *new(io.Reader) }
 
 // Read implements the io.Reader interface for streaming base58 decoding.
 // Reads and decodes base58 data from the underlying reader in chunks.
 // Maintains an internal buffer to handle partial reads efficiently.
-func (d *StreamDecoder) Read(p []byte) (n int, err error) {
-	if d.Error != nil {
-		return 0, d.Error
-	}
+func (d *StreamDecoder) Read(p []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
-	// Return buffered data if available
-	if d.pos < len(d.buffer) {
-		n = copy(p, d.buffer[d.pos:])
-		d.pos += n
-		return n, nil
-	}
+// Return buffered data if available
 
-	// Read encoded data in chunks using reusable buffer
-	rn, err := d.reader.Read(d.readBuf[:])
-	if err != nil && err != io.EOF {
-		return 0, err
-	}
+// Read encoded data in chunks using reusable buffer
 
-	if rn == 0 {
-		return 0, io.EOF
-	}
+// Decode the data using the configured decoder
 
-	// Decode the data using the configured decoder
-	decoded, err := d.decoder.Decode(d.readBuf[:rn])
-	if err != nil {
-		return 0, err
-	}
+// Copy decoded data to the provided buffer
 
-	// Copy decoded data to the provided buffer
-	copied := copy(p, decoded)
-	if copied < len(decoded) {
-		// Buffer remaining data for next read
-		d.buffer = decoded[copied:]
-		d.pos = 0
-	}
-
-	return copied, nil
-}
+// Buffer remaining data for next read
 
 // Encode encodes the given byte slice using base58 encoding.
 // This is a convenience function that creates a new encoder and encodes the input.
-func Encode(src []byte) (dst []byte) {
-	return NewStdEncoder().Encode(src)
-}
+func Encode(src []byte) (dst []byte) { _ = "STUB: not implemented"; return nil }
 
 // Decode decodes the given base58-encoded byte slice back to binary data.
 // This is a convenience function that creates a new decoder and decodes the input.
 // Returns the decoded data, ignoring any decoding errors.
-func Decode(src []byte) []byte {
-	dst, _ := NewStdDecoder().Decode(src)
-	return dst
-}
+func Decode(src []byte) []byte { _ = "STUB: not implemented"; return nil }

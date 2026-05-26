@@ -1,12 +1,8 @@
 package crypto
 
 import (
-	"bytes"
 	"io"
 	"io/fs"
-
-	"github.com/dromara/dongle/coding"
-	"github.com/dromara/dongle/internal/utils"
 )
 
 // Signer defines a Signer struct.
@@ -19,81 +15,51 @@ type Signer struct {
 
 // NewSigner returns a new Signer instance.
 func NewSigner() Signer {
-	return Signer{}
+	_ = "STUB: not implemented"
+
+	// FromString signs from string.
+	return *new(Signer)
 }
 
-// FromString signs from string.
-func (s Signer) FromString(str string) Signer {
-	s.data = utils.String2Bytes(str)
-	return s
-}
+func (s Signer) FromString(str string) Signer { _ = "STUB: not implemented"; return *new(Signer) }
 
 // FromBytes signs from byte slice.
 func (s Signer) FromBytes(b []byte) Signer {
-	s.data = b
-	return s
+	_ = "STUB: not implemented"
+	return *
+
+	// FromFile signs from file.
+	new(Signer)
 }
 
-// FromFile signs from file.
 func (s Signer) FromFile(f fs.File) Signer {
-	s.reader = f
-	return s
+	_ = "STUB: not implemented"
+	return *
+
+	// ToRawString outputs as raw string.
+	new(Signer)
 }
 
-// ToRawString outputs as raw string.
-func (s Signer) ToRawString() string {
-	if len(s.data) == 0 || s.Error != nil {
-		return ""
-	}
-	return utils.Bytes2String(s.sign)
-}
+func (s Signer) ToRawString() string { _ = "STUB: not implemented"; return "" }
 
 // ToRawBytes outputs as raw byte slice.
-func (s Signer) ToRawBytes() []byte {
-	if len(s.data) == 0 || s.Error != nil {
-		return []byte{}
-	}
-	return s.sign
-}
+func (s Signer) ToRawBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // ToBase64String outputs as base64 string.
-func (s Signer) ToBase64String() string {
-	return coding.NewEncoder().FromBytes(s.sign).ByBase64().ToString()
-}
+func (s Signer) ToBase64String() string { _ = "STUB: not implemented"; return "" }
 
 // ToBase64Bytes outputs as base64 byte slice.
-func (s Signer) ToBase64Bytes() []byte {
-	return coding.NewEncoder().FromBytes(s.sign).ByBase64().ToBytes()
-}
+func (s Signer) ToBase64Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // ToHexString outputs as hex string.
-func (s Signer) ToHexString() string {
-	return coding.NewEncoder().FromBytes(s.sign).ByHex().ToString()
-}
+func (s Signer) ToHexString() string { _ = "STUB: not implemented"; return "" }
 
 // ToHexBytes outputs as hex byte slice.
-func (s Signer) ToHexBytes() []byte {
-	return coding.NewEncoder().FromBytes(s.sign).ByHex().ToBytes()
-}
+func (s Signer) ToHexBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 func (s Signer) stream(fn func(io.Writer) io.WriteCloser) ([]byte, error) {
-	var buf bytes.Buffer
-	signer := fn(&buf)
-
-	// Try to reset the reader position if it's a seeker
-	if seeker, ok := s.reader.(io.Seeker); ok {
-		seeker.Seek(0, io.SeekStart)
-	}
-
-	if _, err := io.CopyBuffer(signer, s.reader, make([]byte, BufferSize)); err != nil && err != io.EOF {
-		signer.Close()
-		return []byte{}, err
-	}
-	if err := signer.Close(); err != nil {
-		return []byte{}, err
-	}
-	if buf.Len() == 0 {
-		return []byte{}, nil
-	}
-	return buf.Bytes(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Try to reset the reader position if it's a seeker

@@ -6,9 +6,4 @@ type XteaCipher struct {
 }
 
 // NewXteaCipher returns a new XteaCipher instance.
-func NewXteaCipher(block BlockMode) *XteaCipher {
-	c := &XteaCipher{}
-	c.Block = block
-	c.Padding = No
-	return c
-}
+func NewXteaCipher(block BlockMode) *XteaCipher { _ = "STUB: not implemented"; return nil }

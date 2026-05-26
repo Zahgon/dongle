@@ -1,9 +1,5 @@
 package chacha20poly1305
 
-import (
-	"fmt"
-)
-
 // KeySizeError represents an error when the ChaCha20-Poly1305 key size is invalid.
 // ChaCha20-Poly1305 keys must be exactly 32 bytes (256 bits) long.
 // This error occurs when the provided key does not meet this size requirement.
@@ -11,9 +7,7 @@ type KeySizeError int
 
 // Error returns a formatted error message describing the invalid key size.
 // The message includes the actual key size and the required size for debugging.
-func (k KeySizeError) Error() string {
-	return fmt.Sprintf("crypto/chacha20poly1305: invalid key size %d, must be exactly 32 bytes", k)
-}
+func (k KeySizeError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // InvalidNonceSizeError represents an error when the ChaCha20-Poly1305 nonce size is invalid.
 // ChaCha20-Poly1305 nonces must be exactly 12 bytes long.
@@ -24,9 +18,7 @@ type InvalidNonceSizeError struct {
 
 // Error returns a formatted error message describing the invalid nonce size.
 // The message includes the actual nonce size and the required size for debugging.
-func (e InvalidNonceSizeError) Error() string {
-	return fmt.Sprintf("crypto/chacha20poly1305: invalid nonce size %d, must be exactly 12 bytes", e.Size)
-}
+func (e InvalidNonceSizeError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // EncryptError represents an error when ChaCha20-Poly1305 encryption fails.
 // This error occurs when the underlying ChaCha20-Poly1305 encryption operation fails.
@@ -37,9 +29,7 @@ type EncryptError struct {
 
 // Error returns a formatted error message describing the encryption failure.
 // The message includes the underlying error for debugging.
-func (e EncryptError) Error() string {
-	return fmt.Sprintf("crypto/chacha20poly1305: failed to encrypt data: %v", e.Err)
-}
+func (e EncryptError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // DecryptError represents an error when ChaCha20-Poly1305 decryption fails.
 // This error occurs when the underlying ChaCha20-Poly1305 decryption operation fails.
@@ -50,9 +40,7 @@ type DecryptError struct {
 
 // Error returns a formatted error message describing the decryption failure.
 // The message includes the underlying error for debugging.
-func (e DecryptError) Error() string {
-	return fmt.Sprintf("crypto/chacha20poly1305: failed to decrypt data: %v", e.Err)
-}
+func (e DecryptError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // WriteError represents an error when writing encrypted data fails.
 // This error occurs when writing encrypted data to the underlying writer fails.
@@ -63,9 +51,7 @@ type WriteError struct {
 
 // Error returns a formatted error message describing the write failure.
 // The message includes the underlying error for debugging.
-func (e WriteError) Error() string {
-	return fmt.Sprintf("crypto/chacha20poly1305: failed to write encrypted data: %v", e.Err)
-}
+func (e WriteError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // ReadError represents an error when reading encrypted data fails.
 // This error occurs when reading encrypted data from the underlying reader fails.
@@ -76,9 +62,7 @@ type ReadError struct {
 
 // Error returns a formatted error message describing the read failure.
 // The message includes the underlying error for debugging.
-func (e ReadError) Error() string {
-	return fmt.Sprintf("crypto/chacha20poly1305: failed to read encrypted data: %v", e.Err)
-}
+func (e ReadError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // AuthenticationError represents an error when ChaCha20-Poly1305 authentication fails.
 // This occurs when the computed MAC doesn't match the expected MAC during decryption.
@@ -86,6 +70,4 @@ func (e ReadError) Error() string {
 type AuthenticationError struct{}
 
 // Error returns a formatted error message describing the authentication failure.
-func (e AuthenticationError) Error() string {
-	return "crypto/chacha20poly1305: message authentication failed"
-}
+func (e AuthenticationError) Error() string { _ = "STUB: not implemented"; return "" }

@@ -5,7 +5,6 @@ package des
 
 import (
 	stdCipher "crypto/cipher"
-	"crypto/des"
 	"io"
 
 	"github.com/dromara/dongle/crypto/cipher"
@@ -23,48 +22,21 @@ type StdEncrypter struct {
 // Validates the key length and cipher mode, then initializes the encrypter for DES encryption operations.
 // The key must be exactly 8 bytes for DES encryption.
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
-func NewStdEncrypter(c *cipher.DesCipher) *StdEncrypter {
-	e := &StdEncrypter{
-		cipher: *c,
-	}
+func NewStdEncrypter(c *cipher.DesCipher) *StdEncrypter { _ = "STUB: not implemented"; return nil }
 
-	if len(c.Key) != 8 {
-		e.Error = KeySizeError(len(c.Key))
-		return e
-	}
-
-	// Check for unsupported block modes
-	if c.Block == cipher.GCM {
-		e.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return e
-	}
-
-	return e
-}
+// Check for unsupported block modes
 
 // Encrypt encrypts the given byte slice using DES encryption.
 // Creates a DES cipher block and uses the configured cipher interface
 // to perform the encryption operation with proper error handling.
 // Returns empty data when input is empty.
 func (e *StdEncrypter) Encrypt(src []byte) (dst []byte, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if e.Error != nil {
-		err = e.Error
-		return
-	}
-
-	// Return empty data for empty input
-	if len(src) == 0 {
-		return
-	}
-
-	block, err := des.NewCipher(e.cipher.Key)
-	if err != nil {
-		err = EncryptError{Err: err}
-		return
-	}
-	return e.cipher.Encrypt(src, block)
+	return nil, nil
 }
+
+// Return empty data for empty input
 
 // StdDecrypter represents a DES decrypter for standard decryption operations.
 // It implements DES decryption using the standard DES algorithm with support
@@ -78,48 +50,21 @@ type StdDecrypter struct {
 // Validates the key length and cipher mode, then initializes the decrypter for DES decryption operations.
 // The key must be exactly 8 bytes for DES decryption.
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
-func NewStdDecrypter(c *cipher.DesCipher) *StdDecrypter {
-	d := &StdDecrypter{
-		cipher: *c,
-	}
+func NewStdDecrypter(c *cipher.DesCipher) *StdDecrypter { _ = "STUB: not implemented"; return nil }
 
-	if len(c.Key) != 8 {
-		d.Error = KeySizeError(len(c.Key))
-		return d
-	}
-
-	// Check for unsupported block modes
-	if c.Block == cipher.GCM {
-		d.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return d
-	}
-
-	return d
-}
+// Check for unsupported block modes
 
 // Decrypt decrypts the given byte slice using DES decryption.
 // Creates a DES cipher block and uses the configured cipher interface
 // to perform the decryption operation with proper error handling.
 // Returns empty data when input is empty.
 func (d *StdDecrypter) Decrypt(src []byte) (dst []byte, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if d.Error != nil {
-		err = d.Error
-		return
-	}
-
-	// Return empty data for empty input
-	if len(src) == 0 {
-		return
-	}
-
-	block, err := des.NewCipher(d.cipher.Key)
-	if err != nil {
-		err = DecryptError{Err: err}
-		return
-	}
-	return d.cipher.Decrypt(src, block)
+	return nil, nil
 }
+
+// Return empty data for empty input
 
 // StreamEncrypter represents a DES encrypter for streaming encryption operations.
 // It implements DES encryption using the standard DES algorithm with support
@@ -137,82 +82,46 @@ type StreamEncrypter struct {
 // The key must be exactly 8 bytes for DES encryption.
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
 func NewStreamEncrypter(w io.Writer, c *cipher.DesCipher) io.WriteCloser {
-	e := &StreamEncrypter{
-		writer: w,
-		cipher: *c,
-		buffer: make([]byte, 0, 8), // DES block size is 8 bytes
-	}
-
-	if len(c.Key) != 8 {
-		e.Error = KeySizeError(len(c.Key))
-		return e
-	}
-
-	// Check for unsupported block modes
-	if c.Block == cipher.GCM {
-		e.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return e
-	}
-
-	e.block, e.Error = des.NewCipher(c.Key)
-	return e
+	_ = "STUB: not implemented"
+	return *new(io.WriteCloser)
 }
+
+// DES block size is 8 bytes
+
+// Check for unsupported block modes
 
 // Write implements the io.Writer interface for streaming DES encryption.
 // Provides improved performance through cipher block reuse while maintaining compatibility.
 // Accumulates data and processes it using the cipher interface for consistency.
 func (e *StreamEncrypter) Write(p []byte) (n int, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if e.Error != nil {
-		return 0, e.Error
-	}
-
-	if len(p) == 0 {
-		return 0, nil
-	}
-
-	// Combine any leftover bytes from previous write with new data
-	data := append(e.buffer, p...)
-	e.buffer = nil // Clear buffer after combining
-
-	// Check if cipher block is available (might be nil if key was invalid)
-	if e.block == nil {
-		// Try to create cipher block if it wasn't created during initialization
-		if block, err := des.NewCipher(e.cipher.Key); err == nil {
-			e.block = block
-		}
-	}
-
-	// Use the cipher interface to encrypt data (maintains compatibility with tests)
-	// This ensures proper padding and mode handling
-	encrypted, err := e.cipher.Encrypt(data, e.block)
-	if err != nil {
-		return 0, EncryptError{Err: err}
-	}
-
-	// Write encrypted data to the underlying writer
-	if _, err = e.writer.Write(encrypted); err != nil {
-		return 0, err
-	}
-
-	return len(p), nil
+	return 0, nil
 }
+
+// Combine any leftover bytes from previous write with new data
+
+// Clear buffer after combining
+
+// Check if cipher block is available (might be nil if key was invalid)
+
+// Try to create cipher block if it wasn't created during initialization
+
+// Use the cipher interface to encrypt data (maintains compatibility with tests)
+// This ensures proper padding and mode handling
+
+// Write encrypted data to the underlying writer
 
 // Close implements the io.Closer interface for the DES stream encrypter.
 // Closes the underlying writer if it implements io.Closer.
 // Note: All data is processed in Write method for compatibility with cipher interface.
 func (e *StreamEncrypter) Close() error {
+	_ = "STUB: not implemented"
 	// Check for existing errors
-	if e.Error != nil {
-		return e.Error
-	}
-
-	// Close the underlying writer if it implements io.Closer
-	if closer, ok := e.writer.(io.Closer); ok {
-		return closer.Close()
-	}
 	return nil
 }
+
+// Close the underlying writer if it implements io.Closer
 
 // StreamDecrypter represents a DES decrypter for streaming decryption operations.
 // It implements DES decryption using the standard DES algorithm with support
@@ -231,78 +140,36 @@ type StreamDecrypter struct {
 // The key must be exactly 8 bytes for DES decryption.
 // Only CBC, CTR, ECB, CFB, and OFB modes are supported.
 func NewStreamDecrypter(r io.Reader, c *cipher.DesCipher) io.Reader {
-	d := &StreamDecrypter{
-		reader:   r,
-		cipher:   *c,
-		buffer:   nil, // Will be populated on first read
-		position: 0,
-	}
-
-	if len(c.Key) != 8 {
-		d.Error = KeySizeError(len(c.Key))
-		return d
-	}
-
-	// Check for unsupported block modes
-	if c.Block == cipher.GCM {
-		d.Error = UnsupportedBlockModeError{Mode: "GCM"}
-		return d
-	}
-
-	d.block, d.Error = des.NewCipher(c.Key)
-	return d
+	_ = "STUB: not implemented"
+	return *new(io.Reader)
 }
+
+// Will be populated on first read
+
+// Check for unsupported block modes
 
 // Read implements the io.Reader interface for streaming DES decryption.
 // On the first call, reads all encrypted data from the underlying reader and decrypts it.
 // Subsequent calls return chunks of the decrypted data to maintain streaming interface.
 func (d *StreamDecrypter) Read(p []byte) (n int, err error) {
+	_ = "STUB: not implemented"
 	// Check for existing errors from initialization
-	if d.Error != nil {
-		return 0, d.Error
-	}
-
-	// If we haven't decrypted the data yet, do it now
-	if d.buffer == nil {
-		// Read all encrypted data from the underlying reader
-		encryptedData, err := io.ReadAll(d.reader)
-		if err != nil {
-			return 0, ReadError{Err: err}
-		}
-
-		// If no data to decrypt, return EOF
-		if len(encryptedData) == 0 {
-			return 0, io.EOF
-		}
-
-		// Check if cipher block is available
-		if d.block == nil {
-			// Try to create cipher block if it wasn't created during initialization
-			if block, err := des.NewCipher(d.cipher.Key); err == nil {
-				d.block = block
-			}
-		}
-
-		// Decrypt all the data at once using the cipher interface
-		// This ensures proper handling of padding and cipher modes
-		decrypted, err := d.cipher.Decrypt(encryptedData, d.block)
-		if err != nil {
-			return 0, DecryptError{Err: err}
-		}
-
-		d.buffer = decrypted
-		d.position = 0
-	}
-
-	// If we've already returned all decrypted data, return EOF
-	if d.position >= len(d.buffer) {
-		return 0, io.EOF
-	}
-
-	// Copy as much decrypted data as possible to the provided buffer
-	remainingData := d.buffer[d.position:]
-	copied := copy(p, remainingData)
-	d.position += copied
-
-	return copied, nil
+	return 0, nil
 }
+
+// If we haven't decrypted the data yet, do it now
+
+// Read all encrypted data from the underlying reader
+
+// If no data to decrypt, return EOF
+
+// Check if cipher block is available
+
+// Try to create cipher block if it wasn't created during initialization
+
+// Decrypt all the data at once using the cipher interface
+// This ensures proper handling of padding and cipher modes
+
+// If we've already returned all decrypted data, return EOF
+
+// Copy as much decrypted data as possible to the provided buffer

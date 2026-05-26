@@ -7,15 +7,7 @@ type TeaCipher struct {
 }
 
 // NewTeaCipher returns a new TeaCipher instance.
-func NewTeaCipher(block BlockMode) *TeaCipher {
-	c := &TeaCipher{}
-	c.Block = block
-	c.Padding = No
-	c.Rounds = 64
-	return c
-}
+func NewTeaCipher(block BlockMode) *TeaCipher { _ = "STUB: not implemented"; return nil }
 
 // SetRounds sets the number of rounds for the cipher.
-func (c *TeaCipher) SetRounds(rounds int) {
-	c.Rounds = rounds
-}
+func (c *TeaCipher) SetRounds(rounds int) { _ = "STUB: not implemented"; return }

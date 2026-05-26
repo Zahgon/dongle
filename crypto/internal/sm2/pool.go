@@ -13,21 +13,10 @@ var bigIntPool = sync.Pool{
 }
 
 // getBigInt gets a big.Int from the pool.
-func getBigInt() *big.Int {
-	return bigIntPool.Get().(*big.Int)
-}
+func getBigInt() *big.Int { _ = "STUB: not implemented"; return nil }
 
 // putBigInt returns a big.Int to the pool after zeroing it.
-func putBigInt(x *big.Int) {
-	if x != nil {
-		x.SetInt64(0)
-		bigIntPool.Put(x)
-	}
-}
+func putBigInt(x *big.Int) { _ = "STUB: not implemented"; return }
 
 // putBigInts returns multiple big.Ints to the pool.
-func putBigInts(xs ...*big.Int) {
-	for _, x := range xs {
-		putBigInt(x)
-	}
-}
+func putBigInts(xs ...*big.Int) { _ = "STUB: not implemented"; return }

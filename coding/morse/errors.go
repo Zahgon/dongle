@@ -1,7 +1,5 @@
 package morse
 
-import "fmt"
-
 // InvalidInputError represents an error when the morse input is invalid.
 // This error is now rarely used since most characters are supported.
 type InvalidInputError struct {
@@ -9,9 +7,7 @@ type InvalidInputError struct {
 }
 
 // Error returns a formatted error message describing the invalid input.
-func (e InvalidInputError) Error() string {
-	return fmt.Sprintf("coding/morse: invalid input")
-}
+func (e InvalidInputError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // InvalidCharacterError represents an error when an invalid morse character is found
 // during decoding. This error occurs when a morse code sequence is not recognized.
@@ -20,6 +16,4 @@ type InvalidCharacterError struct {
 }
 
 // Error returns a formatted error message describing the invalid character.
-func (e InvalidCharacterError) Error() string {
-	return fmt.Sprintf("coding/morse: unsupported character %s", e.Char)
-}
+func (e InvalidCharacterError) Error() string { _ = "STUB: not implemented"; return "" }

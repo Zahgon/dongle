@@ -1,12 +1,8 @@
 package crypto
 
 import (
-	"bytes"
 	"io"
 	"io/fs"
-
-	"github.com/dromara/dongle/coding"
-	"github.com/dromara/dongle/internal/utils"
 )
 
 // Verifier defines a Verifier struct.
@@ -20,80 +16,53 @@ type Verifier struct {
 
 // NewVerifier returns a new Verifier instance.
 func NewVerifier() Verifier {
-	return Verifier{}
+	_ = "STUB: not implemented"
+
+	// FromString verifies from string.
+	return *new(Verifier)
 }
 
-// FromString verifies from string.
-func (v Verifier) FromString(s string) Verifier {
-	v.data = utils.String2Bytes(s)
-	return v
-}
+func (v Verifier) FromString(s string) Verifier { _ = "STUB: not implemented"; return *new(Verifier) }
 
 // FromBytes verifies from byte slice.
 func (v Verifier) FromBytes(b []byte) Verifier {
-	v.data = b
-	return v
+	_ = "STUB: not implemented"
+	return *
+
+	// FromFile verifies from file.
+	new(Verifier)
 }
 
-// FromFile verifies from file.
 func (v Verifier) FromFile(f fs.File) Verifier {
-	v.reader = f
-	return v
+	_ = "STUB: not implemented"
+	return *
+
+	// WithHexSign verifies with hex sign.
+	new(Verifier)
 }
 
-// WithHexSign verifies with hex sign.
-func (v Verifier) WithHexSign(s []byte) Verifier {
-	decode := coding.NewDecoder().FromBytes(s).ByHex()
-	if decode.Error != nil {
-		v.Error = decode.Error
-		return v
-	}
-	v.sign = decode.ToBytes()
-	return v
-}
+func (v Verifier) WithHexSign(s []byte) Verifier { _ = "STUB: not implemented"; return *new(Verifier) }
 
 // WithBase64Sign verifies with base64 sign.
 func (v Verifier) WithBase64Sign(s []byte) Verifier {
-	decode := coding.NewDecoder().FromBytes(s).ByBase64()
-	if decode.Error != nil {
-		v.Error = decode.Error
-		return v
-	}
-	v.sign = decode.ToBytes()
-	return v
+	_ = "STUB: not implemented"
+	return *new(Verifier)
 }
 
 // WithRawSign verifies with raw sign.
 func (v Verifier) WithRawSign(s []byte) Verifier {
-	v.sign = s
-	return v
+	_ = "STUB: not implemented"
+	return *
+
+	// ToBool returns true if verification is successful.
+	new(Verifier)
 }
 
-// ToBool returns true if verification is successful.
-func (v Verifier) ToBool() bool {
-	if len(v.data) == 0 || len(v.sign) == 0 {
-		return false
-	}
-	return v.Error == nil && v.verify
-}
+func (v Verifier) ToBool() bool { _ = "STUB: not implemented"; return false }
 
 func (v Verifier) stream(fn func(io.Writer) io.WriteCloser) ([]byte, error) {
-	var buf bytes.Buffer
-	verifier := fn(&buf)
-
-	// Try to reset the reader position if it's a seeker
-	if seeker, ok := v.reader.(io.Seeker); ok {
-		seeker.Seek(0, io.SeekStart)
-	}
-	if _, err := io.CopyBuffer(verifier, v.reader, make([]byte, BufferSize)); err != nil && err != io.EOF {
-		verifier.Close()
-		return []byte{}, err
-	}
-	if err := verifier.Close(); err != nil {
-		return []byte{}, err
-	}
-	if buf.Len() == 0 {
-		return []byte{}, nil
-	}
-	return buf.Bytes(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Try to reset the reader position if it's a seeker
